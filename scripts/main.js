@@ -51,7 +51,8 @@ function Pair(team, playerOne, playerTwo) {
 	this.playerTwo = playerTwo;
 }
 
-function HeadToHead(pairOne, pairTwo) {
+function HeadToHead(id, pairOne, pairTwo) {
+	this.id = id;
 	this.pairOne = pairOne;
 	this.pairTwo = pairTwo;
 }
@@ -227,47 +228,56 @@ const loadMatchupTable = async () => {
 	console.log("loading loadMatchupTable");
 	$("#matchuptable").html("this is the matchup");
 
-	createMatchup("Mike Dolan",
+	createMatchup(1,
+					"Mike Dolan",
 					"Tim Mullan",
 					"Dan Wampler",
 					"Doug Fulton");
 
-	createMatchup("Marc Wampler",
+	createMatchup(2,
+					"Marc Wampler",
 					"Ryan McCauley",
 					"Grant Schulte",
 					"Joe Hart");
 
-	createMatchup("Kyle Singletary",
+	createMatchup(3, 
+					"Kyle Singletary",
 					"Ryan Katch",
 					"Tyler Hellman",
 					"Stephen Humke");
 
-	createMatchup("Jeff Houk",
+	createMatchup(4,
+					"Jeff Houk",
 					"Ryan Franz",
 					"Adam Schmidt",
 					"Matt Seidl");
 
-	createMatchup("Ben James",
+	createMatchup(5,
+					"Ben James",
 					"Mitch Maahs",
 					"James Gisvold",
 					"Stephen Kallenback");
 
-	createMatchup("Adam Dolan",
+	createMatchup(6, 
+					"Adam Dolan",
 					"Alex Hoopes",
 					"Bill Battistone",
 					"Franklin Peitz");
 
-	createMatchup("Will Schwartz",
+	createMatchup(7, 
+					"Will Schwartz",
 					"Zach Hagedorn",
 					"Nick Kollauf",
 					"Nate Bleadorn");
 
-	createMatchup("Andy Mullan",
+	createMatchup(8, 
+					"Andy Mullan",
 					"Paul Wampler",
 					"Colin Thomas",
 					"Tim Marlow");
 
-	createMatchup("RJ Hallman",
+	createMatchup(9, 
+					"RJ Hallman",
 					"Michael Stanfa",
 					"Ty Fulton",
 					"Ryan Mullan");
@@ -277,29 +287,35 @@ const loadMatchupTable = async () => {
 
 }
 
-const createMatchup = (blue1, blue2, red1, red2) => {
+const createMatchup = (id, blue1, blue2, red1, red2) => {
 	let blue = new Pair("blue", blue1, blue2);
 	let red = new Pair("red", red1, red2);
-	let h2h = new HeadToHead(blue, red);
+	let h2h = new HeadToHead(id, blue, red);
 	matches.push(h2h);
 }
 
 const setupScorecard = (matches) => {
 	html = TABLE_OPEN;
-	console.log(matches);
-	
-	header = TH_OPEN + "BLUE" + TH_CLOSE;
+
+	header = TH_OPEN + "#" + TH_CLOSE;
+	header += TH_OPEN + "BLUE" + TH_CLOSE;
+	header += TH_OPEN + "BLUE HOLES WON" + TH_CLOSE;
 	header += TH_OPEN + "SCORE" + TH_CLOSE;
+	header += TH_OPEN + "RED HOLES WON" + TH_CLOSE;
 	header += TH_OPEN + "RED" + TH_CLOSE;
 
 	body = "";
 
 	matches.forEach(match => {
-		console.log(match);
 		body += TR_OPEN;
+		body += TD_OPEN + match.id + TD_CLOSE;
 		body += TD_OPEN + match.pairOne.playerOne + br + match.pairOne.playerTwo + TD_CLOSE;
-		body += TD_OPEN + "score" + TD_CLOSE;
+		body += "<td><input id='iterator_blue_" + match.id + "' value=0 onchange = 'calculateHeadToHeadScore(this.value, \"blue\"," + match.id + ")'></td>";
+		body += "<td id='iterator_score_" + match.id + "'>Even</td>"
+		body += "<td><input  id='iterator_red_" + match.id + "' value=0 onchange = 'calculateHeadToHeadScore(this.value, \"red\"," + match.id + ")'></td>";
+
 		body += TD_OPEN + match.pairTwo.playerOne + br + match.pairTwo.playerTwo + TD_CLOSE;
+
 		body += TR_CLOSE;
 	});
 
@@ -312,6 +328,23 @@ const setupScorecard = (matches) => {
 
 
 	$("#matchuptable").html(html);
+
+}
+
+const calculateHeadToHeadScore = (value, color, match) => {
+
+	var blueVal = $("#iterator_blue_" + match).val();
+	var redVal = $("#iterator_red_" + match).val();
+
+	var score = blueVal - redVal;
+
+	if(score > 0) {
+		$("#iterator_score_" + match).html("Blue +" + score);
+	} else if (score < 0) {
+		$("#iterator_score_" + match).html("Red +" + -score);
+	} else {
+		$("#iterator_score_" + match).html("Even");
+	}
 
 }
 
