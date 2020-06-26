@@ -85,10 +85,11 @@ const setupScorecard = async (matchups) => {
 		total += TR_OPEN;
 		total += TH_OPEN + "TOTAL POINTS" + TH_CLOSE;
 		total += TH_OPEN + "BLUE" + TH_CLOSE;
-		total += TH_OPEN + calculateTotalPoints("blue") + TH_CLOSE;
+		total += TH_OPEN + await calculateTotalPoints("blue", matchups) + TH_CLOSE;
 		total += TH_OPEN + TH_CLOSE;
+		total += TH_OPEN + TH_CLOSE;
+		total += TH_OPEN + await calculateTotalPoints("red", matchups) + TH_CLOSE;
 		total += TH_OPEN + "RED" + TH_CLOSE;
-		total += TH_OPEN + calculateTotalPoints("red") + TH_CLOSE;
 
 		total += TR_CLOSE;
 
@@ -104,9 +105,34 @@ const setupScorecard = async (matchups) => {
 
 }
 
-const calculateTotalPoints = (team) => {
+const calculateTotalPoints = async (team, matchups) => {
 
-	matches.forEach(m => console.log(m))
+	let val = await matchups[matchups.length - 1].then(async (matchupArr) => {
+		redScore = 0;
+		blueScore = 0;
+
+		await matchupArr.forEach(matchup => {
+
+			let team = matchup['team'];
+			if(team.advantage.team == "Red") {
+				redScore += 1;
+			} else if (team.advantage.team == "Blue") {
+				blueScore += 1;
+			} else {
+				redScore += .5;
+				blueScore += .5;
+			}
+			
+		});
+
+		if (team == "blue") {
+			return blueScore;
+		} else {
+			return redScore;
+		}
+	})
+
+	return val;
 
 }
 

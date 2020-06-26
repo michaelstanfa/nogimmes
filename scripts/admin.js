@@ -50,7 +50,7 @@ const populateAdminSchedule = async () => {
 	let body = "";
 
 	let matchups = await retrieveMatchups();
-	console.log(matchups.length);
+	
 	i = 0;
 	matchups[matchups.length - 1].then(matchupArr => {
 		matchupArr.forEach(matchup => {
