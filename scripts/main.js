@@ -50,7 +50,7 @@ const createMatchup = (id, blue1, blue2, red1, red2) => {
 	matches.push(h2h);
 }
 
-const setupScorecard = (matchups) => {
+const setupScorecard = async (matchups) => {
 	html = TABLE_OPEN;
 
 	header = TH_OPEN + "#" + TH_CLOSE;
@@ -64,46 +64,41 @@ const setupScorecard = (matchups) => {
 	body = "";
 
 	matchNum = 0;
-	matchups[matchups.length - 1].then(matchupArr => {
-		matchupArr.forEach(async (matchup) => {
+	await matchups[matchups.length - 1].then(async (matchupArr) => {
+		await matchupArr.forEach(async (matchup) => {
+
 			matchNum++;
-			console.log(matchup);
+
 			let team = matchup['team'];
 			body += TR_OPEN;
 			body += TD_OPEN + matchNum + TD_CLOSE;
 			body += TD_OPEN + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
-			body += "<td><input id='iterator_blue_" + matchNum + "' value=" + team.blue.score + " onchange = 'calculateHeadToHeadScore(this.value, \"blue\"," + matchNum + ")'></td>";
-			body += "<td id='iterator_advantage_" + matchNum + "'>Even</td>";
-			body += "<td id='iterator_score_" + matchNum + "'>--</td>";
-			body += "<td><input  id='iterator_red_" + matchNum + "' value=" + team.red.score + " onchange = 'calculateHeadToHeadScore(this.value, \"red\"," + matchNum + ")'></td>";
+			body += "<td><input type=number id='iterator_blue_" + matchNum + "' value=" + team.blue.score + " onchange = 'setScore(\"blue\", this.value, " + team.red.score + "," + matchNum + ")'></td>";
+			body += "<td id='iterator_advantage_" + matchNum + "'>" + team.advantage.team + "</td>";
+			body += "<td id='iterator_score_" + matchNum + "'>"+ team.advantage.score + "</td>";
+			body += "<td><input  id='iterator_red_" + matchNum + "' value=" + team.red.score + " onchange = 'setScore(\"red\", "+ team.blue.score +", this.value, " + matchNum + ")'></td>";
 			body += TD_OPEN + team.red.member1.name + br + team.red.member2.name + TD_CLOSE
-
-			await calculateHeadToHeadScore($("#iterator_blue_" + matchNum).value, "blue", matchNum);
-			await calculateHeadToHeadScore($("#iterator_red_" + matchNum).value, "red", matchNum);
 
 		});
 	
-	total = "";
-	total += TR_OPEN;
-	total += TH_OPEN + "TOTAL POINTS" + TH_CLOSE;
-	total += TH_OPEN + "BLUE" + TH_CLOSE;
-	total += TH_OPEN + calculateTotalPoints("blue") + TH_CLOSE;
-	total += TH_OPEN + TH_CLOSE;
-	total += TH_OPEN + "RED" + TH_CLOSE;
-	total += TH_OPEN + calculateTotalPoints("red") + TH_CLOSE;
+		total = "";
+		total += TR_OPEN;
+		total += TH_OPEN + "TOTAL POINTS" + TH_CLOSE;
+		total += TH_OPEN + "BLUE" + TH_CLOSE;
+		total += TH_OPEN + calculateTotalPoints("blue") + TH_CLOSE;
+		total += TH_OPEN + TH_CLOSE;
+		total += TH_OPEN + "RED" + TH_CLOSE;
+		total += TH_OPEN + calculateTotalPoints("red") + TH_CLOSE;
 
+		total += TR_CLOSE;
 
-	total += TR_CLOSE;
+		html += header + br;
+		html += body;
+		html += total;
 
-	
+		html += TABLE_CLOSE;
 
-	html += header + br;
-	html += body;
-	html += total;
-
-	html += TABLE_CLOSE;
-
-	$("#matchuptable").html(html);
+		$("#matchuptable").html(html);
 
 	})		
 
@@ -115,12 +110,27 @@ const calculateTotalPoints = (team) => {
 
 }
 
+const setScore = (color, blueValue, redValue, match) => {
+
+	console.log(blueValue);
+	console.log(redValue);
+	setScoreForMatchup(match, blueValue, redValue);
+
+}
+
 const calculateHeadToHeadScore = (value, color, match) => {
 
-	var blueVal = $("#iterator_blue_" + match).val();
-	var redVal = $("#iterator_red_" + match).val();
+	var blueVal = $("#iterator_blue_" + match).value;
+	var redVal = $("#iterator_red_" + match).value;
+
+	console.log(blueVal);
+	console.log(redVal);
 
 	var score = blueVal - redVal;
+
+	console.log(score);
+
+	setScoreForMatchup(match, blueVal, redVal);
 
 	if(score > 0) {
 
@@ -138,7 +148,5 @@ const calculateHeadToHeadScore = (value, color, match) => {
 		$("#iterator_score_" + match).html("--");
 
 	}
-
-	setScoreForMatchup(match, blueVal, redVal);
 
 }

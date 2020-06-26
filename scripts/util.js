@@ -28,25 +28,70 @@ const getThisWeekLines = async (week) => {
 }
 
 const setScoreForMatchup = async (matchId, blueScore, redScore) => {
+	console.log(blueScore);
+	console.log(redScore);
 
 	let matchups = db.collection("matchups");
 
 	let matchup = matchups.doc(matchId.toString()).get();
 
 	matchup.then(r => {
-		console.log(r);	
-		console.log(r.data());
 		
 		red = r.data()['team']['red'];
 		blue = r.data()['team']['blue'];
 
-		red.score = redScore;
-		blue.score = blueScore;
+		let teamAdv = "Even";
+		let teamScore = parseInt(0);
+
+		red.score = parseInt(redScore);
+		blue.score = parseInt(blueScore);
+
+		if(red.score > blue.score) {
+			teamScore = red.score - blue.score;
+			console.log("Red by "+ teamScore);
+			teamAdv = "Red";
+			
+		} else if (red.score < blue.score) {
+			teamScore = blue.score - red.score;
+			console.log("blue by " + teamScore);
+			teamAdv = "Blue";
+			
+		}
+
+		let advantage = {
+			team: teamAdv,
+			score: teamScore
+		}
 
 		db.collection("matchups").doc(matchId.toString()).set({
-			team: {blue, red}
+			team: {blue, red, advantage}
+		}).then(function() {
+		    console.log("Document successfully written!");
+			location.reload();
 		})
 
 	});
+
+}
+
+const calculateHeadToHeadAdvantage = async (matchId) => {
+	let matchups = db.collection("matchups");
+
+	let matchup = matchups.doc(matchId.toString()).get();
+
+	let result = matchup.then(m => {
+		red = m.data()['team']['red'].score;
+		blue = m.data()['team']['blue'].score;
+
+		if(red == blue) {
+			return 'Even';
+		} else if (red > blue) {
+			return 'Red';
+		} else {
+			return 'Blue'
+		}
+	})
+
+	result.then(r => console.log(r));
 
 }

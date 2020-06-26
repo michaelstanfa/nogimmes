@@ -91,16 +91,20 @@ const addNewMatchup = async () => {
 		let blue = {
 				member1: {"name" : blue1},
 				member2: {"name" : blue2},
-				score: 0
+				score: parseInt(0)
 			}
 		let red = {
 				member1: {"name" : red1},
 				member2: {"name" : red2},
-				score: 0
+				score: parseInt(0)
 			}
+		let advantage = {
+			team: "Even",
+			score: parseInt(0)
+		}
 
 		db.collection("matchups").doc(index.toString()).set({
-			team: {blue, red}
+			team: {blue, red, advantage}
 		})
 
 		.then(function() {
