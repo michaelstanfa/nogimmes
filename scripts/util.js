@@ -48,7 +48,7 @@ const setScoreForMatchup = async (matchId, blueScore, redScore) => {
 
 		if(red.score > blue.score) {
 			teamScore = red.score - blue.score;
-			console.log("Red by "+ teamScore);
+
 			teamAdv = "Red";
 
 			advantage = {
@@ -66,9 +66,12 @@ const setScoreForMatchup = async (matchId, blueScore, redScore) => {
 				score: teamScore
 			}
 			
+		} else {
+			advantage = {
+				team: "Even",
+				score: 0
+			}
 		}
-
-
 
 		db.collection("matchups").doc(matchId.toString()).set({
 			team: {blue, red, advantage}

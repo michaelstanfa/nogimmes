@@ -121,12 +121,7 @@ const calculateHeadToHeadScore = (value, color, match) => {
 	var blueVal = $("#iterator_blue_" + match).value;
 	var redVal = $("#iterator_red_" + match).value;
 
-	console.log(blueVal);
-	console.log(redVal);
-
 	var score = blueVal - redVal;
-
-	console.log(score);
 
 	setScoreForMatchup(match, blueVal, redVal);
 
