@@ -253,59 +253,6 @@ const populateWeeklyScheduleForLines = async (thisWeek) => {
 	
 }
 
-// const getLine = (week, team) => {
-// 	return 1.5;
-// }
-
-// const prettyPrintTheLine = (line) => {
-// 	if(line > 0) {
-// 		return " +" + line;
-// 	} else {
-// 		return " -" + line;
-// 	}
-// }
-
-/*const loadData = async () => {
-
-	console.log("loading data");
-
-	let promiseSchedule = getCurrentMatchups();
-
-	promiseSchedule.then(
-		result => {
-			schedule = result;
-
-			let promise = new Promise(function(resolve, reject) {
-			 	resolve(getGameWeek());
-			});
-
-			promise.then(
-				result => {
-					$("#select_week_dropdown_admin").val(result);	
-					loadMatchupsForLineSetting(result);
-				},
-				error => {
-					console.log(error);
-				})
-		},
-		error => {
-			console.log(error);
-		}
-	)
-
-}
-*/
-/*const getPickInfoFromAbbr = (abbr) => {
-
-	// let val = null;
-	let game = games.filter(g => g.homeTeam.Abbreviation == abbr || g.awayTeam.Abbreviation == abbr); 
-	if(game[0].homeTeam.Abbreviation == abbr) {
-		return new Pick(game[0].homeTeam.Abbreviation, game[0].awayTeam.Abbreviation, game[0].homeLine);
-	} else {
-		return new Pick(game[0].awayTeam.Abbreviation, game[0].homeTeam.Abbreviation, game[0].awayLine);
-	}
-}*/
-
 const reviewLines = () => {
 
 	let lines = [ ...$(".line")];

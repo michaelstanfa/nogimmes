@@ -27,7 +27,7 @@ const getThisWeekLines = async (week) => {
 	})
 }
 
-const setScoreForMatchup = async (matchId, team, newScore) => {
+const setScoreForMatchup = async (matchId, blueScore, redScore) => {
 
 	let matchups = db.collection("matchups");
 
@@ -36,20 +36,13 @@ const setScoreForMatchup = async (matchId, team, newScore) => {
 	matchup.then(r => {
 		console.log(r);	
 		console.log(r.data());
-		let updateTeam = r.data()['team'][team];
-		updateTeam.score = parseInt(newScore);
-		if(team=='blue') {
-			blue = updateTeam;
-			red = r.data()['team']['red'];
-		} else {
-			red = updateTeam;
-			blue = r.data()['team']['blue'];
-		}
-
-		console.log(red);
-		console.log(blue);
-		console.log(updateTeam);
 		
+		red = r.data()['team']['red'];
+		blue = r.data()['team']['blue'];
+
+		red.score = redScore;
+		blue.score = blueScore;
+
 		db.collection("matchups").doc(matchId.toString()).set({
 			team: {blue, red}
 		})

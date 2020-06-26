@@ -139,6 +139,6 @@ const calculateHeadToHeadScore = (value, color, match) => {
 
 	}
 
-	setScoreForMatchup(match, color, value);
+	setScoreForMatchup(match, blueVal, redVal);
 
 }
