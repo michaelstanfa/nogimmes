@@ -26,3 +26,34 @@ const getThisWeekLines = async (week) => {
 		resolve(year.collection('week').doc(week.toString()).get().then(doc => doc.data()));
 	})
 }
+
+const setScoreForMatchup = async (matchId, team, newScore) => {
+
+	let matchups = db.collection("matchups");
+
+	let matchup = matchups.doc(matchId.toString()).get();
+
+	matchup.then(r => {
+		console.log(r);	
+		console.log(r.data());
+		let updateTeam = r.data()['team'][team];
+		updateTeam.score = parseInt(newScore);
+		if(team=='blue') {
+			blue = updateTeam;
+			red = r.data()['team']['red'];
+		} else {
+			red = updateTeam;
+			blue = r.data()['team']['blue'];
+		}
+
+		console.log(red);
+		console.log(blue);
+		console.log(updateTeam);
+		
+		db.collection("matchups").doc(matchId.toString()).set({
+			team: {blue, red}
+		})
+
+	});
+
+}

@@ -18,13 +18,15 @@
   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
 
   <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
-  <script src="props.js"></script>
-
+  <script src="scripts/admin.js"></script>
   <script src="scripts/main.js"></script>
-  <script src="scripts/gameweek.js"></script>
   <script src="scripts/util.js"></script>
+  
+  
+  <script src="scripts/gameweek.js"></script>
+
   <script type = "text/javascript">
-	window.onload = loadData();
+	// window.onload = loadData();
   $(document).ready(function() {
     loadMatchupTable();
   })
@@ -130,19 +132,19 @@ table {
 
   <script>
     // Your web app's Firebase configuration
-    var firebaseConfig = {
-      apiKey: "AIzaSyCoxiaT7ekzVGZdHK58KvWjqEI6Ac4183U",
-      authDomain: "millans-pickem.firebaseapp.com",
-      databaseURL: "https://millans-pickem.firebaseio.com",
-      projectId: "millans-pickem",
-      storageBucket: "millans-pickem.appspot.com",
-      messagingSenderId: "808572509568",
-      appId: "1:808572509568:web:14e83a3dd9a713f36ab565",
-      measurementId: "G-Z52LQX8T0B"
+     var firebaseConfig = {
+        apiKey: "AIzaSyBOPou2VZRfsqWv7V7VwhCuWjY4GZqNogk",
+        authDomain: "bropen-710fb.firebaseapp.com",
+        databaseURL: "https://bropen-710fb.firebaseio.com",
+        projectId: "bropen-710fb",
+        storageBucket: "bropen-710fb.appspot.com",
+        messagingSenderId: "811241805150",
+        appId: "1:811241805150:web:594a32c11d78f0ef686bcf"
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
+    var db = firebase.firestore();
+    // firebase.analytics();
   </script>
 
 

@@ -1,24 +1,16 @@
 let schedule = null;
-let thisWeek = null;
-let picks = null;
-let choices = null;
-let weekGames = null;
-let games = [];
-let submittingPicks = {};
-let weeks = null;
 
-var TABLE_OPEN = "<table class='table'>";
-var TABLE_CLOSE = "</table>";
-var TH_OPEN = "<th>";
-var TH_CLOSE = "</th>"
-var TR_OPEN = "<tr>";
-var TR_CLOSE = "</tr>";
-var TD_OPEN = "<td>";
-var TD_CLOSE = "</td>";
-var DIV_OPEN = "<div>";
-var DIV_CLOSE = "</div>";
+function Pair(team, playerOne, playerTwo) {
+	this.team = team;
+	this.playerOne = playerOne;
+	this.playerTwo = playerTwo;
+}
 
-// var List = require("collections/list");
+function HeadToHead(id, pairOne, pairTwo) {
+	this.id = id;
+	this.pairOne = pairOne;
+	this.pairTwo = pairTwo;
+}
 
 function Schedule(fullgameschedule) {
 	this.fullgameschedule = fullgameschedule;
@@ -45,40 +37,133 @@ function Pick(team, against, line) {
 	this.line = line;
 }
 
-const getSchedule = async () => {
-	return new Promise(function(resolve, reject){
-		if(null == schedule) {
-			resolve(retrieveSched());
-		} else {
-			resolve(schedule);
-		}	
+const retrieveMatchups = async () => {
+	return new Promise(async function(resolve, reject){
+		resolve(setupAllMatchups());
 	})
 }
 
-const getTeamCard = (team, gameIndex) => {
-	return '<td class="team_option" index=' + gameIndex + ' abbr=' + team.Abbreviation + ' onclick=selectThisCard(this)>' + team.Name + TD_CLOSE;
+const populateAdminSchedule = async () => {
+
+	let header = "<table class = 'table'><tr><th>#</th><th>Blue Team</th><th>Red Team</th></tr>";
+
+	let body = "";
+
+	let matchups = await retrieveMatchups();
+	console.log(matchups.length);
+	i = 0;
+	matchups[matchups.length - 1].then(matchupArr => {
+		matchupArr.forEach(matchup => {
+			i++;
+			console.log(matchup);
+			let team = matchup['team'];
+			body += "<tr>"
+			body += "<td>" + i + "</td>";
+			body += "<td>" + team.blue.member1.name + " & " + team.blue.member2.name + "</td>";
+			body += "<td>" + team.red.member1.name + " & " + team.red.member2.name + "</td>";
+			body += "</tr>";	
+		});
+		adminMatchupHTML = header + body + "</table>"
+		$("#current_matchups").html(adminMatchupHTML);
+	})	
 
 }
 
-async function retrieveSched() {
+const addNewMatchup = async () => {
+	console.log($("#new_blue_player_1").val());
+	console.log($("#new_blue_player_2").val());
+	console.log($("#new_red_player_1").val());
+	console.log($("#new_red_player_2").val());
 
-	return $.ajax
-	({
-		type: "GET",
-		url: "https://api.mysportsfeeds.com/v1.2/pull/nfl/2019-regular/full_game_schedule.json",
-		dataType: 'json',
-		async: true,
-		headers: {
-	      "Authorization": "Basic " + btoa(creds.id + ":" + creds.secret)
-	    },
-	   	error: function(XMLHttpRequest, textStatus, errorThrown) {
-	   		console.log("Failed to make call to endpoint");
-	   		console.error("Status: " + textStatus);
-	   		console.error("Error: " + errorThrown);
-	   	}
+	let blue1 = $("#new_blue_player_1").val()
+	let blue2 = $("#new_blue_player_2").val()
+	let red1 = $("#new_red_player_1").val();
+	let red2 = $("#new_red_player_2").val();
+
+	let index = await db.collection("matchups").get().then(snap => {
+		return snap.size + 1;
+	});
+
+	if(checkInput(blue1) || checkInput(blue2) || checkInput(red1) || checkInput(red2)) {
+		window.alert("Please enter a value for each person");
+	} else {
+
+		let blue = {
+				member1: {"name" : blue1},
+				member2: {"name" : blue2},
+				score: 0
+			}
+		let red = {
+				member1: {"name" : red1},
+				member2: {"name" : red2},
+				score: 0
+			}
+
+		db.collection("matchups").doc(index.toString()).set({
+			team: {blue, red}
+		})
+
+		.then(function() {
+		    console.log("Document successfully written!");
+			location.reload();
+		})
+
+		clearInput($("#new_blue_player_1"));		
+		clearInput($("#new_blue_player_2"));		
+		clearInput($("#new_red_player_1"));		
+		clearInput($("#new_red_player_2"));		
+
+	}
+
+}
+
+const checkInput = (val) => {
+	if(null == val || "" == val.trim()) {
+		return true;
+	}
+	return false;
+}
+
+const clearInput = (ele) => {
+	ele.val("");
+}
+
+const setupAllMatchups = async function(req, res) {
+
+	return await generateMatchups();
+
+}
+
+const generateMatchups = async () => {
+	
+	console.log("generate matchups");
+	
+	let matchups = await db.collection('matchups');
+	
+	let snapshot = await matchups.get();
+
+	let matchupArr = [];
+
+	let finalArr = await snapshot.docs.map(async(d) => {
+
+	
+		let t = matchups.doc(d.id).get();
+
+		await t.then(r => {
+
+			matchupArr.push(r.data())
+
+		});
+
+		if(matchupArr.length == snapshot.docs.length) {
+			
+			return matchupArr;
+		}
 
 	})
 
+	return await finalArr;
+	
 }
 
 async function loadMatchupsForLineSetting(week) {
@@ -168,23 +253,23 @@ const populateWeeklyScheduleForLines = async (thisWeek) => {
 	
 }
 
-const getLine = (week, team) => {
-	return 1.5;
-}
+// const getLine = (week, team) => {
+// 	return 1.5;
+// }
 
-const prettyPrintTheLine = (line) => {
-	if(line > 0) {
-		return " +" + line;
-	} else {
-		return " -" + line;
-	}
-}
+// const prettyPrintTheLine = (line) => {
+// 	if(line > 0) {
+// 		return " +" + line;
+// 	} else {
+// 		return " -" + line;
+// 	}
+// }
 
-const loadData = async () => {
+/*const loadData = async () => {
 
 	console.log("loading data");
 
-	let promiseSchedule = getSchedule();
+	let promiseSchedule = getCurrentMatchups();
 
 	promiseSchedule.then(
 		result => {
@@ -207,9 +292,10 @@ const loadData = async () => {
 			console.log(error);
 		}
 	)
-}
 
-const getPickInfoFromAbbr = (abbr) => {
+}
+*/
+/*const getPickInfoFromAbbr = (abbr) => {
 
 	// let val = null;
 	let game = games.filter(g => g.homeTeam.Abbreviation == abbr || g.awayTeam.Abbreviation == abbr); 
@@ -218,7 +304,7 @@ const getPickInfoFromAbbr = (abbr) => {
 	} else {
 		return new Pick(game[0].awayTeam.Abbreviation, game[0].homeTeam.Abbreviation, game[0].awayLine);
 	}
-}
+}*/
 
 const reviewLines = () => {
 
