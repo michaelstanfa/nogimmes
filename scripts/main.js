@@ -55,10 +55,10 @@ const setupScorecard = async (matchups) => {
 
 	header = TH_OPEN + "#" + TH_CLOSE;
 	header += TH_OPEN + "BLUE" + TH_CLOSE;
-	header += TH_OPEN + "BLUE HOLES WON" + TH_CLOSE;
+	header += TH_OPEN + "B. WON" + TH_CLOSE;
 	header += TH_OPEN + "ADV." + TH_CLOSE;
 	header += TH_OPEN + "SCORE" + TH_CLOSE;
-	header += TH_OPEN + "RED HOLES WON" + TH_CLOSE;
+	header += TH_OPEN + "R. WON" + TH_CLOSE;
 	header += TH_OPEN + "RED" + TH_CLOSE;
 
 	body = "";
@@ -73,10 +73,10 @@ const setupScorecard = async (matchups) => {
 			body += TR_OPEN;
 			body += TD_OPEN + matchNum + TD_CLOSE;
 			body += TD_OPEN + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
-			body += "<td><input type=numeric id='iterator_blue_" + matchNum + "' value=" + team.blue.score + " onchange =  'setScore(\"blue\", this.value, " + team.red.score + "," + matchNum + ")'></td>";
+			body += "<td><input size=5 type=numeric id='iterator_blue_" + matchNum + "' value=" + team.blue.score + " onchange =  'setScore(\"blue\", this.value, " + team.red.score + "," + matchNum + ")'></td>";
 			body += "<td id='iterator_advantage_" + matchNum + "'>" + team.advantage.team + "</td>";
 			body += "<td id='iterator_score_" + matchNum + "'>"+ team.advantage.score + "</td>";
-			body += "<td><input type=numeric id='iterator_red_" + matchNum + "' value=" + team.red.score + " onchange = 'setScore(\"red\", "+ team.blue.score +", this.value, " + matchNum + ")'></td>";
+			body += "<td><input size=5 type=numeric id='iterator_red_" + matchNum + "' value=" + team.red.score + " onchange = 'setScore(\"red\", "+ team.blue.score +", this.value, " + matchNum + ")'></td>";
 			body += TD_OPEN + team.red.member1.name + br + team.red.member2.name + TD_CLOSE
 
 		});
@@ -112,8 +112,6 @@ const calculateTotalPoints = (team) => {
 
 const setScore = (color, blueValue, redValue, match) => {
 
-	console.log(blueValue);
-	console.log(redValue);
 	setScoreForMatchup(match, blueValue, redValue);
 
 }

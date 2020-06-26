@@ -28,8 +28,6 @@ const getThisWeekLines = async (week) => {
 }
 
 const setScoreForMatchup = async (matchId, blueScore, redScore) => {
-	console.log(blueScore);
-	console.log(redScore);
 
 	let matchups = db.collection("matchups");
 
@@ -37,8 +35,9 @@ const setScoreForMatchup = async (matchId, blueScore, redScore) => {
 
 	matchup.then(r => {
 		
-		red = r.data()['team']['red'];
-		blue = r.data()['team']['blue'];
+		let red = r.data()['team']['red'];
+		let blue = r.data()['team']['blue'];
+		let advantage = r.data()['team']['advantage']
 
 		let teamAdv = "Even";
 		let teamScore = parseInt(0);
@@ -46,22 +45,30 @@ const setScoreForMatchup = async (matchId, blueScore, redScore) => {
 		red.score = parseInt(redScore);
 		blue.score = parseInt(blueScore);
 
+
 		if(red.score > blue.score) {
 			teamScore = red.score - blue.score;
 			console.log("Red by "+ teamScore);
 			teamAdv = "Red";
+
+			advantage = {
+				team: "Red",
+				score: teamScore
+			}
 			
 		} else if (red.score < blue.score) {
 			teamScore = blue.score - red.score;
-			console.log("blue by " + teamScore);
+			console.log("Blue by " + teamScore);
 			teamAdv = "Blue";
+
+			advantage = {
+				team: "Blue",
+				score: teamScore
+			}
 			
 		}
 
-		let advantage = {
-			team: teamAdv,
-			score: teamScore
-		}
+
 
 		db.collection("matchups").doc(matchId.toString()).set({
 			team: {blue, red, advantage}
