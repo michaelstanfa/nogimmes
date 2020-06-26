@@ -81,10 +81,10 @@ const setupScorecard = async (matchups) => {
 			body += "<tr bgcolor = " + rowColor + ">";
 			body += TD_OPEN + matchNum + TD_CLOSE;
 			body += TD_OPEN + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
-			body += "<td><input size=5 type=number pattern=[0-9] id='iterator_blue_" + matchNum + "' value=" + team.blue.score + " onchange =  'setScore(\"blue\", this.value, " + team.red.score + "," + matchNum + ")'></td>";
+			body += "<td><input size=5 type=text pattern=\"\d*\" id='iterator_blue_" + matchNum + "' value=" + team.blue.score + " onchange =  'setScore(\"blue\", this.value, " + team.red.score + "," + matchNum + ")'></td>";
 			body += "<td id='iterator_advantage_" + matchNum + "'>" + team.advantage.team + "</td>";
 			body += "<td id='iterator_score_" + matchNum + "'>"+ team.advantage.score + "</td>";
-			body += "<td><input size=5 type=number pattern= id='iterator_red_" + matchNum + "' value=" + team.red.score + " onchange = 'setScore(\"red\", "+ team.blue.score +", this.value, " + matchNum + ")'></td>";
+			body += "<td><input size=5 type=text pattern=\"\d*\" id='iterator_red_" + matchNum + "' value=" + team.red.score + " onchange = 'setScore(\"red\", "+ team.blue.score +", this.value, " + matchNum + ")'></td>";
 			body += TD_OPEN + team.red.member1.name + br + team.red.member2.name + TD_CLOSE
 
 		});
