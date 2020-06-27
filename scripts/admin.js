@@ -91,17 +91,58 @@ const addNewMatchup = async () => {
 		let blue = {
 				member1: {"name" : blue1},
 				member2: {"name" : blue2},
-				score: parseInt(0)
+				score: parseInt(0),
+				scores: {
+					score_1: 0,
+					score_2: 0,
+					score_3: 0,
+					score_4: 0,
+					score_5: 0,
+					score_6: 0,
+					score_7: 0,
+					score_8: 0,
+					score_9: 0,
+					score_10: 0,
+					score_11: 0,
+					score_12: 0,
+					score_13: 0,
+					score_14: 0,
+					score_15: 0,
+					score_16: 0,
+					score_17: 0,
+					score_18: 0
+				}
 			}
 		let red = {
 				member1: {"name" : red1},
 				member2: {"name" : red2},
-				score: parseInt(0)
+				score: parseInt(0),
+				scores: {
+					score_1: 0,
+					score_2: 0,
+					score_3: 0,
+					score_4: 0,
+					score_5: 0,
+					score_6: 0,
+					score_7: 0,
+					score_8: 0,
+					score_9: 0,
+					score_10: 0,
+					score_11: 0,
+					score_12: 0,
+					score_13: 0,
+					score_14: 0,
+					score_15: 0,
+					score_16: 0,
+					score_17: 0,
+					score_18: 0
+				}
 			}
 		let advantage = {
 			team: "Even",
 			score: parseInt(0)
 		}
+		
 
 		db.collection("matchups").doc(index.toString()).set({
 			team: {blue, red, advantage}
@@ -139,8 +180,6 @@ const setupAllMatchups = async function(req, res) {
 }
 
 const generateMatchups = async () => {
-	
-	console.log("generate matchups");
 	
 	let matchups = await db.collection('matchups');
 	

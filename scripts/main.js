@@ -55,10 +55,7 @@ const setupScorecard = async (matchups) => {
 
 	header = TH_OPEN + "#" + TH_CLOSE;
 	header += TH_OPEN + "BLUE" + TH_CLOSE;
-	header += TH_OPEN + "B. WON" + TH_CLOSE;
-	header += TH_OPEN + "ADV." + TH_CLOSE;
 	header += TH_OPEN + "SCORE" + TH_CLOSE;
-	header += TH_OPEN + "R. WON" + TH_CLOSE;
 	header += TH_OPEN + "RED" + TH_CLOSE;
 
 	body = "";
@@ -69,11 +66,11 @@ const setupScorecard = async (matchups) => {
 
 			matchNum++;
 
-
 			let team = matchup['team'];
+			
 			let rowColor = '#b3b3b3';
 			if(team.advantage.team == 'Blue') {
-				rowColor = '#7979ff	';
+				rowColor = '#7979ff';
 			} else if (team.advantage.team == 'Red') {
 				rowColor = '#ff6666';
 			}
@@ -81,11 +78,10 @@ const setupScorecard = async (matchups) => {
 			body += "<tr bgcolor = " + rowColor + ">";
 			body += TD_OPEN + matchNum + TD_CLOSE;
 			body += TD_OPEN + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
-			body += "<td><input size=5 type=text pattern=\"\\d*\" id='iterator_blue_" + matchNum + "' value=" + team.blue.score + " onchange =  'setScore(\"blue\", this.value, " + team.red.score + "," + matchNum + ")'></td>";
-			body += "<td id='iterator_advantage_" + matchNum + "'>" + team.advantage.team + "</td>";
-			body += "<td id='iterator_score_" + matchNum + "'>"+ team.advantage.score + "</td>";
-			body += "<td><input size=5 type=text pattern=\"\\d*\" id='iterator_red_" + matchNum + "' value=" + team.red.score + " onchange = 'setScore(\"red\", "+ team.blue.score +", this.value, " + matchNum + ")'></td>";
+			body += TD_OPEN + team.blue.score + "-" + team.red.score + TD_CLOSE
 			body += TD_OPEN + team.red.member1.name + br + team.red.member2.name + TD_CLOSE
+			body += "<td><button onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button></td>";
+			body += TR_CLOSE;
 
 		});
 	
@@ -93,10 +89,7 @@ const setupScorecard = async (matchups) => {
 		total += TR_OPEN;
 		total += TH_OPEN + "TOTAL POINTS" + TH_CLOSE;
 		total += TH_OPEN + "BLUE" + TH_CLOSE;
-		total += TH_OPEN + await calculateTotalPoints("blue", matchups) + TH_CLOSE;
-		total += TH_OPEN + TH_CLOSE;
-		total += TH_OPEN + TH_CLOSE;
-		total += TH_OPEN + await calculateTotalPoints("red", matchups) + TH_CLOSE;
+		total += TH_OPEN + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + TH_CLOSE;
 		total += TH_OPEN + "RED" + TH_CLOSE;
 
 		total += TR_CLOSE;
@@ -110,6 +103,155 @@ const setupScorecard = async (matchups) => {
 		$("#matchuptable").html(html);
 
 	})		
+
+}
+
+const openUserModal = (info, id) => {
+
+	populateHoles();
+	$("#modal_submit_score").attr("team_index", id);
+	$("#modal-blue-team-names").html(info['team']['blue'].member1.name + " & " + info['team']['blue'].member2.name);
+	$("#modal-red-team-names").html(info['team']['red'].member1.name + " & " + info['team']['red'].member2.name);
+
+	populateBlueTeamScores(id, info);
+	populateRedTeamScores(id, info);
+
+	$("#submit-modal").modal("show");
+
+}
+
+const populateBlueTeamScores =(id, info) => {
+
+	let dataRow = ""
+
+	for(i = 1; i <= 18; i ++) {
+		dataRow += "<td><input value=" + info.team.blue.scores["score_" + i] + " type=text pattern=\"\\d*\" size=1 id='score-blue-id_" + id + "_hole_"  + i + "'></input></td>";
+	}
+
+	$("#modal-blue-team-scores").html(dataRow);
+
+}
+
+const submitCurrentScores = async () => {
+	
+	let matchups = await db.collection("matchups");
+	let id = $("#modal_submit_score").attr("team_index");
+
+	let matchup = await matchups.doc(id.toString()).get();
+
+	let red = matchup.data()['team']['red'];
+	let blue = matchup.data()['team']['blue'];
+	let advantage = matchup.data()['team']['advantage']
+
+	let blue_score = {
+		score_1: $("#score-blue-id_" + id + "_hole_1").val(),
+		score_2: $("#score-blue-id_" + id + "_hole_2").val(),
+		score_3: $("#score-blue-id_" + id + "_hole_3").val(),
+		score_4: $("#score-blue-id_" + id + "_hole_4").val(),
+		score_5: $("#score-blue-id_" + id + "_hole_5").val(),
+		score_6: $("#score-blue-id_" + id + "_hole_6").val(),
+		score_7: $("#score-blue-id_" + id + "_hole_7").val(),
+		score_8: $("#score-blue-id_" + id + "_hole_8").val(),
+		score_9: $("#score-blue-id_" + id + "_hole_9").val(),
+		score_10: $("#score-blue-id_" + id + "_hole_10").val(),
+		score_11: $("#score-blue-id_" + id + "_hole_11").val(),
+		score_12: $("#score-blue-id_" + id + "_hole_12").val(),
+		score_13: $("#score-blue-id_" + id + "_hole_13").val(),
+		score_14: $("#score-blue-id_" + id + "_hole_14").val(),
+		score_15: $("#score-blue-id_" + id + "_hole_15").val(),
+		score_16: $("#score-blue-id_" + id + "_hole_16").val(),
+		score_17: $("#score-blue-id_" + id + "_hole_17").val(),
+		score_18: $("#score-blue-id_" + id + "_hole_18").val()
+	}
+
+	let red_score = {
+		score_1: $("#score-red-id_" + id + "_hole_1").val(),
+		score_2: $("#score-red-id_" + id + "_hole_2").val(),
+		score_3: $("#score-red-id_" + id + "_hole_3").val(),
+		score_4: $("#score-red-id_" + id + "_hole_4").val(),
+		score_5: $("#score-red-id_" + id + "_hole_5").val(),
+		score_6: $("#score-red-id_" + id + "_hole_6").val(),
+		score_7: $("#score-red-id_" + id + "_hole_7").val(),
+		score_8: $("#score-red-id_" + id + "_hole_8").val(),
+		score_9: $("#score-red-id_" + id + "_hole_9").val(),
+		score_10: $("#score-red-id_" + id + "_hole_10").val(),
+		score_11: $("#score-red-id_" + id + "_hole_11").val(),
+		score_12: $("#score-red-id_" + id + "_hole_12").val(),
+		score_13: $("#score-red-id_" + id + "_hole_13").val(),
+		score_14: $("#score-red-id_" + id + "_hole_14").val(),
+		score_15: $("#score-red-id_" + id + "_hole_15").val(),
+		score_16: $("#score-red-id_" + id + "_hole_16").val(),
+		score_17: $("#score-red-id_" + id + "_hole_17").val(),
+		score_18: $("#score-red-id_" + id + "_hole_18").val()
+	}
+
+	let red_wins = 0;
+	let blue_wins = 0;
+	let ties = 0;
+
+	for(i = 1; i <= 18; i++) {
+		let b = blue_score['score_' + i];
+		let r = red_score['score_' + i];
+		if(b < r) {
+			blue_wins ++;
+		} else if(r < b) {
+			red_wins ++;
+		} else {
+			ties ++;
+		}
+
+	}
+
+	if(blue_wins > red_wins) {
+		advantage = {
+			team: "Blue"
+		}
+	} else if(red_wins > blue_wins ) {
+		advantage = {
+			team: "Red"
+		}
+	} else {
+		advantage = {
+			team: "Even"
+		}
+	}
+
+	blue.score = blue_wins;
+	red.score = red_wins;
+
+	blue.scores = blue_score;
+	red.scores = red_score;
+
+	db.collection("matchups").doc(id.toString()).set({
+		team: {blue, red, advantage}
+	}).then(function() {
+	    console.log("Document successfully written!");
+		location.reload();
+	})
+}
+
+const populateRedTeamScores =(id, info) => {
+
+	let dataRow = ""
+
+	for(i = 1; i <= 18; i ++) {
+		dataRow += "<td><input value=" + info.team.red.scores["score_" + i] + " type=text pattern=\"\\d*\" size=1 id ='score-red-id_" + id + "_hole_"  + i + "'></input></td>";
+	}
+
+	$("#modal-red-team-scores").html(dataRow);
+
+} 
+
+
+const populateHoles = () => {
+
+	let holeHeaderRow = "";
+
+	for(i = 1; i <= 18; i ++) {
+		holeHeaderRow += "<td>" + i + "</td>";
+	}
+
+	$(".holes").html(holeHeaderRow);
 
 }
 
