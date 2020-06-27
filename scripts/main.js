@@ -64,15 +64,15 @@ const setupScorecard = async (matchups) => {
 
 			let rowColor = '#b3b3b3';
 			if(team.advantage.team == 'Blue') {
-				rowColor = '#7979ff';
+				rowColor = '#00DCFF';
 			} else if (team.advantage.team == 'Red') {
-				rowColor = '#ff6666';
+				rowColor = '#FF8A8A';
 			}
 
 			body += "<tr bgcolor = " + rowColor + ">";
 			// body += TD_OPEN + matchNum + TD_CLOSE;
 			body += "<td align='center'>" + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
-			body += "<td align='center'>" + team.blue.score + " - " + team.red.score + "<br><button onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button>"+ TD_CLOSE;
+			body += "<td align='center'>" + team.blue.score + " - " + team.red.score + "<br><button class='btn btn-info' onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button>" + TD_CLOSE;
 			body += "<td align='center'>" + team.red.member1.name + br + team.red.member2.name + TD_CLOSE + "</tr>"
 			body += TR_CLOSE;
 
@@ -227,7 +227,7 @@ const populateBlueTeamScores =(id, info) => {
 	let dataRow = ""
 
 	for(i = 1; i <= 18; i ++) {
-		dataRow += "<td><input onfocus='this.value=\"\"' value=" + info.team.blue.scores["score_" + i] + " type=text pattern=\"\\d*\" size=4 id='score-blue-id_" + id + "_hole_"  + i + "'></input></td>";
+		dataRow += "<td><input class='modal-scorecard-score-input-box' disabled=true onfocus='this.value=\"\"' value=" + info.team.blue.scores["score_" + i] + " type=text pattern=\"\\d*\" size=4 id='score-blue-id_" + id + "_hole_"  + i + "'></input></td>";
 	}
 
 	$("#modal-blue-team-scores").html(dataRow);
@@ -239,7 +239,7 @@ const populateRedTeamScores =(id, info) => {
 	let dataRow = ""
 
 	for(i = 1; i <= 18; i ++) {
-		dataRow += "<td><input onfocus='this.value=\"\"' value=" + info.team.red.scores["score_" + i] + " type=text pattern=\"\\d*\" size=4 id ='score-red-id_" + id + "_hole_"  + i + "'></input></td>";
+		dataRow += "<td><input class='modal-scorecard-score-input-box' disabled=true onfocus='this.value=\"\"' value=" + info.team.red.scores["score_" + i] + " type=text pattern=\"\\d*\" size=4 id ='score-red-id_" + id + "_hole_"  + i + "'></input></td>";
 	}
 
 	$("#modal-red-team-scores").html(dataRow);
@@ -337,4 +337,9 @@ const calculateHeadToHeadScore = (value, color, match) => {
 
 	}
 
+}
+
+const unlockModalScoreEditing = () => {
+	$("#modal_submit_score").attr("disabled", false);
+	$(".modal-scorecard-score-input-box").attr("disabled", false);
 }

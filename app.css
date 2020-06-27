@@ -16,3 +16,9 @@ body {cursor: pointer};
   padding-bottom: 10px; /* must be same height as the footer */
   background-color:red;
 }
+
+table, th, td, tr {
+  border: 1px solid black;
+  border-collapse:collapse;
+  color: white;
+}
