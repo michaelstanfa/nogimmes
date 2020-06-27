@@ -127,18 +127,6 @@ const openUserModal = (info, id) => {
 
 }
 
-const populateBlueTeamScores =(id, info) => {
-
-	let dataRow = ""
-
-	for(i = 1; i <= 18; i ++) {
-		dataRow += "<td><input onfocus='this.value=\"\"' value=" + info.team.blue.scores["score_" + i] + " type=text pattern=\"\\d*\" size=4 id='score-blue-id_" + id + "_hole_"  + i + "'></input></td>";
-	}
-
-	$("#modal-blue-team-scores").html(dataRow);
-
-}
-
 const submitCurrentScores = async () => {
 	
 	let matchups = await db.collection("matchups");
@@ -237,12 +225,24 @@ const submitCurrentScores = async () => {
 	})
 }
 
+const populateBlueTeamScores =(id, info) => {
+
+	let dataRow = ""
+
+	for(i = 1; i <= 18; i ++) {
+		dataRow += "<td><input onfocus='this.value=\"\"' value=" + info.team.blue.scores["score_" + i] + " type=text pattern=\"\\d*\" size=4 id='score-blue-id_" + id + "_hole_"  + i + "'></input></td>";
+	}
+
+	$("#modal-blue-team-scores").html(dataRow);
+
+}
+
 const populateRedTeamScores =(id, info) => {
 
 	let dataRow = ""
 
 	for(i = 1; i <= 18; i ++) {
-		dataRow += "<td><input value=" + info.team.red.scores["score_" + i] + " type=text pattern=\"\\d*\" size=1 id ='score-red-id_" + id + "_hole_"  + i + "'></input></td>";
+		dataRow += "<td><input onfocus='this.value=\"\"' value=" + info.team.red.scores["score_" + i] + " type=text pattern=\"\\d*\" size=4 id ='score-red-id_" + id + "_hole_"  + i + "'></input></td>";
 	}
 
 	$("#modal-red-team-scores").html(dataRow);
