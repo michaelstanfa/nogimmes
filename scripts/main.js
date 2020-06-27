@@ -70,29 +70,28 @@ const setupScorecard = async (matchups) => {
 			}
 
 			body += "<tr bgcolor = " + rowColor + ">";
-			body += TD_OPEN + matchNum + TD_CLOSE;
-			body += TD_OPEN + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
-			body += TD_OPEN + team.blue.score + " - " + team.red.score + TD_CLOSE
-			body += TD_OPEN + team.red.member1.name + br + team.red.member2.name + TD_CLOSE
-			body += "<td><button onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button></td>";
+			// body += TD_OPEN + matchNum + TD_CLOSE;
+			body += "<td align='center'>" + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
+			body += "<td align='center'>" + team.blue.score + " - " + team.red.score + "<br><button onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button>"+ TD_CLOSE;
+			body += "<td align='center'>" + team.red.member1.name + br + team.red.member2.name + TD_CLOSE + "</tr>"
 			body += TR_CLOSE;
 
 		});
 
 		let total = "";
 		total += TR_OPEN;
-		total += TH_OPEN + TH_CLOSE;
-		total += TH_OPEN + "BLUE" + TH_CLOSE;
-		total += TH_OPEN + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + TH_CLOSE;
-		total += TH_OPEN + "RED " + TH_CLOSE;
+		// total += TH_OPEN + TH_CLOSE;
+		total += "<td align = 'center'>" + "BLUE" + TD_CLOSE;
+		total += "<td align = 'center'>" + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + TD_CLOSE;
+		total += "<td align = 'center'>" + "RED " + TD_CLOSE;
 		total += TR_CLOSE;
 
 		let holeCount = "";
 		holeCount += TR_OPEN;
-		holeCount += TH_OPEN + TH_CLOSE;
-		holeCount += TH_OPEN + "Hole Count" + TH_CLOSE;
-		holeCount += TH_OPEN + await calculateTotalHolesWon("blue", matchups) + " - " + await calculateTotalHolesWon("red", matchups) + TH_CLOSE;
-		holeCount += TH_OPEN + TH_CLOSE;
+		// holeCount += TH_OPEN + TH_CLOSE;
+		holeCount += "<td align = 'center'>" + "Hole Count" + TD_CLOSE;
+		holeCount += "<td align = 'center'>" + await calculateTotalHolesWon("blue", matchups) + " - " + await calculateTotalHolesWon("red", matchups) + TD_CLOSE;
+		holeCount += "<td align = 'center'>" + TH_CLOSE;
 		holeCount += TR_CLOSE;
 
 		html += total;
