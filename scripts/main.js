@@ -20,7 +20,6 @@ var DIV_OPEN = "<div>";
 var DIV_CLOSE = "</div>";
 var br = "</br>";
 
-
 function Pair(team, playerOne, playerTwo) {
 	this.team = team;
 	this.playerOne = playerOne;
@@ -67,13 +66,15 @@ const setupScorecard = async (matchups) => {
 			matchNum++;
 
 			let team = matchup['team'];
-			
+
 			let rowColor = '#b3b3b3';
 			if(team.advantage.team == 'Blue') {
 				rowColor = '#7979ff';
 			} else if (team.advantage.team == 'Red') {
 				rowColor = '#ff6666';
 			}
+
+
 
 			body += "<tr bgcolor = " + rowColor + ">";
 			body += TD_OPEN + matchNum + TD_CLOSE;
@@ -85,18 +86,24 @@ const setupScorecard = async (matchups) => {
 
 		});
 	
-		total = "";
-		total += TR_OPEN;
-		total += TH_OPEN + "TOTAL POINTS" + TH_CLOSE;
-		total += TH_OPEN + "BLUE" + TH_CLOSE;
-		total += TH_OPEN + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + TH_CLOSE;
-		total += TH_OPEN + "RED" + TH_CLOSE;
 
-		total += TR_CLOSE;
+
+			total = "";
+			total += TR_OPEN;
+			total += TH_OPEN + "TOTAL POINTS" + TH_CLOSE;
+			total += TH_OPEN + TH_CLOSE;
+			total += TH_OPEN + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + TH_CLOSE;
+			total += TH_OPEN + TH_CLOSE;
+			total += TR_CLOSE;
+			
 
 		html += header + br;
-		html += body;
+
+
 		html += total;
+		html += body;
+
+
 
 		html += TABLE_CLOSE;
 
@@ -125,7 +132,7 @@ const populateBlueTeamScores =(id, info) => {
 	let dataRow = ""
 
 	for(i = 1; i <= 18; i ++) {
-		dataRow += "<td><input value=" + info.team.blue.scores["score_" + i] + " type=text pattern=\"\\d*\" size=1 id='score-blue-id_" + id + "_hole_"  + i + "'></input></td>";
+		dataRow += "<td><input onfocus='this.value=\"\"' value=" + info.team.blue.scores["score_" + i] + " type=text pattern=\"\\d*\" size=4 id='score-blue-id_" + id + "_hole_"  + i + "'></input></td>";
 	}
 
 	$("#modal-blue-team-scores").html(dataRow);
