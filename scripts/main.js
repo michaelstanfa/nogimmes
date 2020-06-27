@@ -52,11 +52,6 @@ const createMatchup = (id, blue1, blue2, red1, red2) => {
 const setupScorecard = async (matchups) => {
 	html = TABLE_OPEN;
 
-	header = TH_OPEN + "#" + TH_CLOSE;
-	header += TH_OPEN + "BLUE" + TH_CLOSE;
-	header += TH_OPEN + "SCORE" + TH_CLOSE;
-	header += TH_OPEN + "RED" + TH_CLOSE;
-
 	body = "";
 
 	matchNum = 0;
@@ -74,8 +69,6 @@ const setupScorecard = async (matchups) => {
 				rowColor = '#ff6666';
 			}
 
-
-
 			body += "<tr bgcolor = " + rowColor + ">";
 			body += TD_OPEN + matchNum + TD_CLOSE;
 			body += TD_OPEN + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
@@ -87,18 +80,13 @@ const setupScorecard = async (matchups) => {
 		});
 	
 
-
-			total = "";
-			total += TR_OPEN;
-			total += TH_OPEN + "TOTAL POINTS" + TH_CLOSE;
-			total += TH_OPEN + TH_CLOSE;
-			total += TH_OPEN + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + TH_CLOSE;
-			total += TH_OPEN + TH_CLOSE;
-			total += TR_CLOSE;
-			
-
-		html += header + br;
-
+		total = "";
+		total += TR_OPEN;
+		total += TH_OPEN + TH_CLOSE;
+		total += TH_OPEN + "BLUE" + TH_CLOSE;
+		total += TH_OPEN + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + TH_CLOSE;
+		total += TH_OPEN + "RED " + TH_CLOSE;
+		total += TR_CLOSE;
 
 		html += total;
 		html += body;
@@ -125,6 +113,10 @@ const openUserModal = (info, id) => {
 
 	$("#submit-modal").modal("show");
 
+}
+
+const openPictureModal = () => {
+	$("#rain-modal").modal("show");
 }
 
 const submitCurrentScores = async () => {
