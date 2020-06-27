@@ -143,9 +143,11 @@ const addNewMatchup = async () => {
 			score: parseInt(0)
 		}
 		
+		let ties = 0;
+
 
 		db.collection("matchups").doc(index.toString()).set({
-			team: {blue, red, advantage}
+			team: {blue, red, advantage, ties}
 		})
 
 		.then(function() {

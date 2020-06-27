@@ -38,6 +38,7 @@ const setScoreForMatchup = async (matchId, blueScore, redScore) => {
 		let red = r.data()['team']['red'];
 		let blue = r.data()['team']['blue'];
 		let advantage = r.data()['team']['advantage']
+		let ties = r.data()['team']['ties']
 
 		let teamAdv = "Even";
 		let teamScore = parseInt(0);
@@ -74,7 +75,7 @@ const setScoreForMatchup = async (matchId, blueScore, redScore) => {
 		}
 
 		db.collection("matchups").doc(matchId.toString()).set({
-			team: {blue, red, advantage}
+			team: {blue, red, advantage, ties}
 		}).then(function() {
 		    console.log("Document successfully written!");
 			location.reload();

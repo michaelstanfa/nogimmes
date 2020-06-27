@@ -71,8 +71,11 @@ const setupScorecard = async (matchups) => {
 
 			body += "<tr bgcolor = " + rowColor + ">";
 			// body += TD_OPEN + matchNum + TD_CLOSE;
+
+			let totalHoles = team.blue.score + team.red.score + team.ties;
+
 			body += "<td align='center'>" + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
-			body += "<td align='center'>" + team.blue.score + " - " + team.red.score + "<br><button class='btn btn-info' onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button>" + TD_CLOSE;
+			body += "<td align='center'><b>" + team.blue.score + " - " + team.red.score + "</b><br>thru " + totalHoles + "<br><button class='btn btn-info' onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button>" + TD_CLOSE;
 			body += "<td align='center'>" + team.red.member1.name + br + team.red.member2.name + TD_CLOSE + "</tr>"
 			body += TR_CLOSE;
 
@@ -81,17 +84,17 @@ const setupScorecard = async (matchups) => {
 		let total = "";
 		total += TR_OPEN;
 		// total += TH_OPEN + TH_CLOSE;
-		total += "<td align = 'center'>" + "BLUE" + TD_CLOSE;
-		total += "<td align = 'center'>" + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + TD_CLOSE;
-		total += "<td align = 'center'>" + "RED " + TD_CLOSE;
+		total += "<td align = 'center'><h5>" + "BLUE" + "<h5></td>";
+		total += "<td align = 'center'><h5>" + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + "<h5>" + TD_CLOSE;
+		total += "<td align = 'center'><h5>" + "RED " + "</h5>" + TD_CLOSE;
 		total += TR_CLOSE;
 
 		let holeCount = "";
 		holeCount += TR_OPEN;
 		// holeCount += TH_OPEN + TH_CLOSE;
-		holeCount += "<td align = 'center'>" + "Hole Count" + TD_CLOSE;
-		holeCount += "<td align = 'center'>" + await calculateTotalHolesWon("blue", matchups) + " - " + await calculateTotalHolesWon("red", matchups) + TD_CLOSE;
-		holeCount += "<td align = 'center'>" + TH_CLOSE;
+		holeCount += "<td align = 'center'><h5>" + "Hole Count" + "<h5></td>";;
+		holeCount += "<td align = 'center'><h5>" + await calculateTotalHolesWon("blue", matchups) + " - " + await calculateTotalHolesWon("red", matchups) + "<h5></td>";;
+		holeCount += "<td align = 'center'><h5>" + "<h5></td>";;
 		holeCount += TR_CLOSE;
 
 		html += total;
@@ -112,6 +115,10 @@ const openUserModal = (info, id) => {
 	$("#modal_submit_score").attr("team_index", id);
 	$("#modal-blue-team-names").html(info['team']['blue'].member1.name + " & " + info['team']['blue'].member2.name);
 	$("#modal-red-team-names").html(info['team']['red'].member1.name + " & " + info['team']['red'].member2.name);
+ 	
+	let totalHoles = info['team'].ties + info['team']['red'].score + info['team']['blue'].score
+
+	$("#modal-current-team-scores").html(info['team']['blue'].score + "-" + info['team']['red'].score + ' through ' + totalHoles + ' hole' + (totalHoles == 1 ? '' : 's'));
 
 	populateBlueTeamScores(id, info);
 	populateRedTeamScores(id, info);
@@ -179,7 +186,7 @@ const submitCurrentScores = async () => {
 
 	let red_wins = 0;
 	let blue_wins = 0;
-	let ties = 0;
+	let tie = 0;
 
 	for(i = 1; i <= 18; i++) {
 		let b = blue_score['score_' + i];
@@ -189,7 +196,10 @@ const submitCurrentScores = async () => {
 		} else if(r < b) {
 			red_wins ++;
 		} else {
-			ties ++;
+			if(b != 0 & r != 0){
+				tie ++;	
+			}
+			
 		}
 
 	}
@@ -208,14 +218,20 @@ const submitCurrentScores = async () => {
 		}
 	}
 
+	ties = tie;
+
+
+
 	blue.score = blue_wins;
 	red.score = red_wins;
 
 	blue.scores = blue_score;
 	red.scores = red_score;
 
+
+
 	db.collection("matchups").doc(id.toString()).set({
-		team: {blue, red, advantage}
+		team: {blue, red, advantage, ties}
 	}).then(function() {
 	    console.log("Document successfully written!");
 		location.reload();
@@ -301,7 +317,6 @@ const calculateTotalHolesWon = async (team, matchups) => {
 		return score;
 	})
 
-	console.log(val);
 	return val;
 }
 

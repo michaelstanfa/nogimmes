@@ -61,9 +61,11 @@ table {
 
   <div>
     <h1>Bropen 2020</h1>
+
+    <hr>
     
     <div id = "matchuptable"></div>
-    <hr>
+
     <a onclick='openPictureModal()' data-target='#rain-modal' data-toggle='modal'><u>Will it rain?</u></a>
     <br><br><br>
 <!--     <p><a href="./admin.html">Admin Panel</a></p> -->
@@ -93,7 +95,14 @@ table {
           <div class="modal-body">
 
             <div>
-              <button onClick='unlockModalScoreEditing()' type = "button" class ="btn btn-primary">Edit Scores</button>
+
+              <div col-span-6>
+                <button onClick='unlockModalScoreEditing()' type = "button" class ="btn btn-primary">Edit Scores</button>
+                <br>
+                <br>
+                <h6 id = 'modal-current-team-scores'></h6>
+              </div>
+              <hr>
             </div>
 
 
