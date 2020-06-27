@@ -78,9 +78,8 @@ const setupScorecard = async (matchups) => {
 			body += TR_CLOSE;
 
 		});
-	
 
-		total = "";
+		let total = "";
 		total += TR_OPEN;
 		total += TH_OPEN + TH_CLOSE;
 		total += TH_OPEN + "BLUE" + TH_CLOSE;
@@ -88,10 +87,17 @@ const setupScorecard = async (matchups) => {
 		total += TH_OPEN + "RED " + TH_CLOSE;
 		total += TR_CLOSE;
 
+		let holeCount = "";
+		holeCount += TR_OPEN;
+		holeCount += TH_OPEN + TH_CLOSE;
+		holeCount += TH_OPEN + "Hole Count" + TH_CLOSE;
+		holeCount += TH_OPEN + await calculateTotalHolesWon("blue", matchups) + " - " + await calculateTotalHolesWon("red", matchups) + TH_CLOSE;
+		holeCount += TH_OPEN + TH_CLOSE;
+		holeCount += TR_CLOSE;
+
 		html += total;
 		html += body;
-
-
+		html += holeCount;
 
 		html += TABLE_CLOSE;
 
@@ -283,6 +289,21 @@ const calculateTotalPoints = async (team, matchups) => {
 
 	return val;
 
+}
+
+const calculateTotalHolesWon = async (team, matchups) => {
+	let val = await matchups[matchups.length - 1].then(async (matchupArr) => {
+		score = 0;
+		await matchupArr.forEach(matchup => {
+
+			score += matchup['team'][team].score
+			
+		});
+		return score;
+	})
+
+	console.log(val);
+	return val;
 }
 
 const setScore = (color, blueValue, redValue, match) => {
