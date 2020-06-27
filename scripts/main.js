@@ -50,9 +50,9 @@ const createMatchup = (id, blue1, blue2, red1, red2) => {
 }
 
 const setupScorecard = async (matchups) => {
-	html = TABLE_OPEN;
-
-	body = "";
+	html = "<div>";
+	html = "<table style=\"overflow:auto\">";
+  	body = "";
 
 	matchNum = 0;
 	await matchups[matchups.length - 1].then(async (matchupArr) => {
@@ -72,7 +72,7 @@ const setupScorecard = async (matchups) => {
 			body += "<tr bgcolor = " + rowColor + ">";
 			body += TD_OPEN + matchNum + TD_CLOSE;
 			body += TD_OPEN + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
-			body += TD_OPEN + team.blue.score + "-" + team.red.score + TD_CLOSE
+			body += TD_OPEN + team.blue.score + " - " + team.red.score + TD_CLOSE
 			body += TD_OPEN + team.red.member1.name + br + team.red.member2.name + TD_CLOSE
 			body += "<td><button onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button></td>";
 			body += TR_CLOSE;
@@ -99,7 +99,7 @@ const setupScorecard = async (matchups) => {
 		html += body;
 		html += holeCount;
 
-		html += TABLE_CLOSE;
+		html += TABLE_CLOSE + "</div>"
 
 		$("#matchuptable").html(html);
 
