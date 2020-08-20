@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bropen 2020</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link rel="icon" href="images/andy_mullan.jpg">
+  <link rel="apple-touch-icon" href="images/andy_mullan.jpg">
+
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" sizes="196x196" href="images/andy_mullan.png">
+  <link rel="shortcut icon" sizes="128x128" href="images/andy_mullan.png">
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link rel="stylesheet" src="/app.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
+
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
+  <script src="scripts/admin.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/util.js"></script>
+  
+  
+  <script src="scripts/gameweek.js"></script>
+
+  <script type = "text/javascript">
+	// window.onload = loadData();
+  $(document).ready(function() {
+    loadMatchupTable();
+  })
+</script>
+</head>
+
+<style>
+
+table {
+	padding: 2px;
+	border: 2px;
+	border-top;
+	border-bottom;
+	text-align:outside;
+	display:block;
+}
+
+#header{
+	font-weight: bold;
+}
+
+</style>
+
+<body class="container main">
+
+  <div>
+    <h1>Bropen 2020</h1>
+
+    <hr>
+    
+    <div id = "matchuptable"></div>
+
+    <a onclick='openPictureModal()' data-target='#rain-modal' data-toggle='modal'><u>Will it rain?</u></a>
+    <br><br><br>
+<!--     <p><a href="./admin.html">Admin Panel</a></p> -->
+  </div>
+</body>
+
+  <div class="container">
+  
+    <div id = "matchup_table"></div>
+    <!-- Trigger the modal with a button -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="submit-modal" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Submit Score</h4>
+
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <div>
+
+          </div>
+          <div class="modal-body">
+
+            <div>
+
+              <div col-span-6>
+                <button onClick='unlockModalScoreEditing()' type = "button" class ="btn btn-primary">Edit Scores</button>
+                <br>
+                <br>
+                <h6 id = 'modal-current-team-scores'></h6>
+              </div>
+              <hr>
+            </div>
+
+
+            <p>
+            <div id = "modal-scorecard">
+                
+              <table style="overflow-x:auto" border="1px solid black bold" id = "modal-blue-team-table">
+                <h5 id = "modal-blue-team-names"></h5>
+                <tr class = "holes">
+                </tr>
+                <tr id = "modal-blue-team-scores">
+                
+                </tr>
+
+              </table>
+
+              </br>
+              </br>
+
+              <table style="overflow-x:auto" border="1px solid black bold" id = "modal-red-team-table">
+                <h5 id = "modal-red-team-names"></h5>
+                <tr class = "holes">
+
+                </tr>
+                <tr id = "modal-red-team-scores">
+                
+                </tr>
+
+              </table>
+
+            </div>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button id="modal_submit_score" team_index = 0 type="button" class="btn btn-success" disabled=true data-dismiss="modal" onclick='submitCurrentScores(this)'>Submit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class = "modal fade" id ="rain-modal">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>
+              NOT A CHANCE
+            <div id = "modal-picuture-rain">
+              <img src="images/bropen_rain.jpg">
+            </div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-functions.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+     var firebaseConfig = {
+        apiKey: "AIzaSyBOPou2VZRfsqWv7V7VwhCuWjY4GZqNogk",
+        authDomain: "bropen-710fb.firebaseapp.com",
+        databaseURL: "https://bropen-710fb.firebaseio.com",
+        projectId: "bropen-710fb",
+        storageBucket: "bropen-710fb.appspot.com",
+        messagingSenderId: "811241805150",
+        appId: "1:811241805150:web:594a32c11d78f0ef686bcf"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+    // firebase.analytics();
+  </script>
+
+
+</html>
