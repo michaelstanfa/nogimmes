@@ -29,8 +29,6 @@
   <script src="../scripts/main.js"></script>
   <script src="../scripts/util.js"></script>
   
-  
-  <script src="../scripts/gameweek.js"></script>
 
   <script type = "text/javascript">
 	// window.onload = loadData();
@@ -45,8 +43,6 @@
 table {
 	padding: 2px;
 	border: 2px;
-	border-top;
-	border-bottom;
 	text-align:outside;
 	display:block;
 }
@@ -60,20 +56,31 @@ table {
 <body class="container main">
 
   <div>
-    <h1>Bropen 2020</h1>
+    <h1>Bropen 2021</h1>
 
     <hr>
+
+    <div>
+      <h4>Round</h4>
+      <button class= "btn btn-secondary btn-sm" round='1'>First</button>
+      <button class= "btn btn-secondary btn-sm" round='2'>Second</button>
+      <button class= "btn btn-secondary btn-sm" round='3'>Third</button>
+      <button class= "btn btn-secondary btn-sm" round='4'>Fourth</button>
+      
+    </div>
+    <br>
     
     <div id = "matchuptable"></div>
 
-    <a onclick='openPictureModal()' data-target='#rain-modal' data-toggle='modal'><u>Will it rain?</u></a>
-    <br><br><br>
-<!--     <p><a href="./admin.html">Admin Panel</a></p> -->
   </div>
 </body>
 
+
+
   <div class="container">
   
+
+
     <div id = "matchup_table"></div>
     <!-- Trigger the modal with a button -->
 

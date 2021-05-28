@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Andy's Admin Page</title>
+  <title>Admin Page</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
@@ -24,13 +24,14 @@
   <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
   <!-- <script src="props.js"></script> -->
 
-  <script src="scripts/util.js"></script>
-  <script src="scripts/admin.js"></script>
-
-  <script src="scripts/gameweek.js"></script>
+  <script src="../scripts/util.js"></script>
+  <script src="../scripts/admin.js"></script>
   <script type = "text/javascript">
 	$(document).ready(function() {
-    populateAdminSchedule();
+    // fetchRounds();
+    populateGolfers();
+    populateAdminRounds();
+    
   })
 </script>
 </head>
@@ -40,8 +41,6 @@
 table {
 	padding: 2px;
 	border: 2px;
-	border-top;
-	border-bottom;
 	text-align:outside;
 	display:block;
 }
@@ -54,76 +53,190 @@ table {
 
 <body class="container main">
 
-  <h1>It's The Bropen!</h1>
+  <h1>Bropen - Admin Page</h1>
   
   <p><a href="./index.html">Scorecards</a></p>
 
-  <div id='add_new_matchups'>
+  <div id='add_new_event_golfers'>
+    <h5>Add Golfer to Event</h5>
+    <table class="table">
+      <tr>
+        <td>
+          Team
+        </td>
+        <td>
+          <select id ="new_event_golfer_team">
+            <option value = "red">Red</option>
+            <option value = "blue">Blue</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Golfer Name
+        </td>
+        <td>
+          <input placeholder="Golfer Name" id='new_event_golfer_name'>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <button class="btn btn-success btn-block" type="submit" onClick='addGolfer($("#new_event_golfer_name").val(), $("#new_event_golfer_team :selected").val())'>Add Golfer</button>
+        </td>
+      </tr>
+    </table>   
+
+  </div>
+  <hr>
+  <h5>Current Golfers</h5>
+  <div id = "current_golfers">
     
-    <table>
+  </div>
+
+  <hr>
+
+  <div id='add_new_round'>
+
+    <h4>Add Round</h5>
+    <div class="border-bottom:10px">
+
+    <table class="table">
+      <tr>
+        <td>
+          Scoring
+        </td>
+        <td>
+          <select id ="round_scoring_type">
+            <option value = "match_play">Match Play</option>
+            <option value = "stroke_play">Stroke Play</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Style
+        </td>
+        <td>
+          <select id ="round_style">
+            <option value = "best_ball">Best Ball</option>
+            <option value = "alternate_shot">Alternate Shot</option>
+            <option value = "head_to_head">Head to Head</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Players per Team
+        </td>
+        <td>
+          <select id = "round_matchup_team_player_count">
+            <option value = "1">1 v 1</option>
+            <option value = "2">2 v 2</option>
+          </select>
+        </td>
+      </tr>      
+      <tr>
+        <td colspan="2">
+          <button class="btn btn-success btn-block" type="submit" onClick='addRound()'>Add Round</button>
+        <td>
+      </tr>
       
-      <h3>Add Matchup</h3>
-      <tr>
-      <th>Blue - Player 1</th>
-      <th>Blue - Player 2</th>
-      <th>Red - Player 1</th>
-      <th>Red - Player 2</th>
-      </tr>
-      <tr>
-        <td><input id='new_blue_player_1'></td>
-        <td><input id='new_blue_player_2'></td>
-        <td><input id='new_red_player_1'></td>
-        <td><input id='new_red_player_2'></td>
-      </tr>
-
-    <hr/>
-    <tr><td><button onClick = 'addNewMatchup()'>Add Matchup</button></td></tr>
     </table>
-    <br>
-    
 
   </div>
 
+  </div>
 
-  <div id='current_matchups'>
-
-    <table><tr><th>#</th><th>Blue Team</th><th>Red Team</th></tr></table>
-  
+  <div id='admin_round_selector'>
 
   </div>
 
-    <!-- <select id = 'select_week_dropdown_admin' class ='btn-select dropdown-toggle' data-toggle='dropdown' onchange = "loadMatchupsForLineSetting(this.value)">
-      <option value='select'>Select Week</option>
-      <option value='1'>Week 1</option>
-      <option value='2'>Week 2</option>
-      <option value='3'>Week 3</option>
-      <option value='4'>Week 4</option>
-      <option value='5'>Week 5</option>
-      <option value='6'>Week 6</option>
-      <option value='7'>Week 7</option>
-      <option value='8'>Week 8</option>
-      <option value='9'>Week 9</option>
-      <option value='10'>Week 10</option>
-      <option value='11'>Week 11</option>
-      <option value='12'>Week 12</option>
-      <option value='13'>Week 13</option>
-      <option value='14'>Week 14</option>
-      <option value='15'>Week 15</option>
-      <option value='16'>Week 16</option>
-      <option value='17'>Week 17</option>
-    </select> -->
+  <br>
+
+  <h5 class='round_number'></h5>
+  <div id = "round_information">
+
+    <div id='add_new_matchups' hidden>
+      <br>
+      
+      <h5>Current Round Matchups</h5>
+      <div id = "current_round_matchups">
+        
+      </div>
+
+      <h5> Add Matchup</h5>
+      <table class = "table">
+
+        <tr>
+          <td>
+            Red Team
+          </td>
+          <td>
+            <div>
+              <select id = "red_team_dropdown_1"></select>
+              <select id = "red_team_dropdown_2" hidden></select>
+            </div>
+          </td>
+        </tr>
+        
+        <tr>
+          <td>
+            Blue Team
+          </td>
+          <td>
+            <div>
+              <select id = "blue_team_dropdown_1"></select>
+              <select id = "blue_team_dropdown_2" hidden></select>
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td colspan="2">
+            <button class ="btn btn-success btn-block" onClick = "addMatchup()">Add Matchup </button>
+          </td>
+        </tr>
+      </table>
+      
+      <br>
+      
+      <hr>
+        <!-- <h5>Add Matchup</h5>
+        <tr>
+        <th>Blue - Player 1</th>
+        <th>Blue - Player 2</th>
+        <th>Red - Player 1</th>
+        <th>Red - Player 2</th>
+        </tr>
+        <tr>
+          <td><input id='new_blue_player_1'></td>
+          <td><input id='new_blue_player_2'></td>
+          <td><input id='new_red_player_1'></td>
+          <td><input id='new_red_player_2'></td>
+        </tr>
+
+      <hr/>
+      <tr><td><button onClick = 'addNewMatchup()'>Add Matchup</button></td></tr>
+      </table>
+      <br>
+      
+      <div id='current_matchups'>
+
+        <table><tr><th>#</th><th>Blue Team</th><th>Red Team</th></tr></table>
+      
     
-    <!-- <br />
-    <br />
-    
-    <div id = "this_week_games_admin"></div> -->
+      </div> -->
+
+    </div>
+  </div>
+
+
+
+
+
 
 </body>
 
-  <!-- <div class = "footer-container">
-    <button onclick="reviewLines()" value = "submit" class="btn btn-submit btn-primary">Submit Lines</button>
-  </div> -->
-  
   <div class="container">
   
     <!-- Trigger the modal with a button -->

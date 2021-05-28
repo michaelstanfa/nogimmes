@@ -22,3 +22,7 @@ table, th, td, tr {
   border-collapse:collapse;
   color: white;
 }
+
+button {
+	margin: 5px
+}

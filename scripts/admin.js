@@ -1,5 +1,3 @@
-let schedule = null;
-
 function Pair(team, playerOne, playerTwo) {
 	this.team = team;
 	this.playerOne = playerOne;
@@ -12,29 +10,102 @@ function HeadToHead(id, pairOne, pairTwo) {
 	this.pairTwo = pairTwo;
 }
 
-function Schedule(fullgameschedule) {
-	this.fullgameschedule = fullgameschedule;
+function Golfer(id, name, team) {
+	this.id = id;
+	this.name = name;
+	this.team = team;
 }
 
-function Week(week, games) {
-	this.week = week,
-	this.games = games;
+let currentRoundForAddingMatchup;
+
+const addGolfer = async(name, team) => {
+
+	username = name.toLowerCase().replace(/[^A-Za-z]/g, "");
+
+	if(!name) {
+		alert('Please enter a name');
+	} else {
+	 	let golfers = await db.collection('golfers');
+
+		const golfer = {
+			name: name,
+			team: team
+		}
+		
+		await golfers.doc(username).set(golfer);
+	
+	}
+
+	populateGolfers();
+
 }
 
-function Game(id, awayTeam, homeTeam, date, time, awayLine, homeLine) {
-	this.id = id,
-	this.awayTeam = awayTeam,
-	this.homeTeam = homeTeam,
-	this.date = date,
-	this.time = time,
-	this.awayLine = awayLine,
-	this.homeLine = homeLine;
+const populateGolfers = async () => {
+	
+	let allGolfers = await retrieveGolfers();
+	j = 0;
+
+	if(allGolfers.length != 0) {
+
+		golfersHtml = "";
+		golfersHtml += "<table class='table'>";
+		golfersHtml += "<tr>";
+		golfersHtml += "<th>Name</th>"
+		golfersHtml += "<th>Team</th>"
+		golfersHtml += "<th></th>"
+		golfersHtml += "</tr>";
+		
+		allGolfers[allGolfers.length - 1].then(golfersArr => {
+			golfersArr.forEach(golfer => {
+				
+				golfersHtml += "<tr>";
+				golfersHtml += "<td>" + golfer.name + "</td>";
+				golfersHtml += "<td>" + golfer.team + "</td>";
+				golfersHtml += "<td><button class='btn btn-danger btn-sml' onClick=deleteGolfer(\"" + golfer.id + "\")>Delete Golfer</button></td>";
+				golfersHtml += "</tr>";
+			});
+			golfersHtml += "</table>";
+
+			$("#current_golfers").html(golfersHtml);
+		});
+	} else {
+		$("#current_golfers").html("");
+	}
+
+
 }
 
-function Pick(team, against, line) {
-	this.team = team,
-	this.against = against,
-	this.line = line;
+const retrieveGolfers = async () => {
+	return new Promise(async function(resolve, reject) {
+		resolve(fetchGolfers());
+	})
+}
+
+const fetchGolfers = async () => {
+	let golfers = await db.collection('golfers');
+	
+	let snapshot = await golfers.get();
+
+	let finalGolfers = await snapshot.docs.map(async(d) => {
+
+		let g = golfers.doc(d.id).get();
+		golfersArr = [];
+		await g.then(r => {
+			golfersArr.push(new Golfer(d.id, r.data().name, r.data().team))
+		})
+		
+		return golfersArr;
+	})
+
+	return await finalGolfers;
+
+}
+
+const deleteGolfer = async (id) => {
+	
+	const res = await db.collection('golfers').doc(id).delete();
+	
+	populateGolfers();
 }
 
 const retrieveMatchups = async () => {
@@ -43,19 +114,29 @@ const retrieveMatchups = async () => {
 	})
 }
 
-const populateAdminSchedule = async () => {
+const populateAdminRounds = async () => {
+
+	let rounds = await db.collection('rounds');
+
+	let snapshot = await rounds.get();
+	let adminRoundSelectorHTML = "";
+	snapshot.forEach(r => {
+		adminRoundSelectorHTML += "<button class='btn btn-default border border-primary' onClick='displayAdminRound("+r.id+")' value=\"" + r.id + "\">Round " + r.id + " Matchups</button>"; 
+	})
+
+	$("#admin_round_selector").html(adminRoundSelectorHTML);
 
 	let header = "<table class = 'table'><tr><th>#</th><th>Blue Team</th><th>Red Team</th></tr>";
 
 	let body = "";
 
 	let matchups = await retrieveMatchups();
-	
+
 	i = 0;
 	matchups[matchups.length - 1].then(matchupArr => {
 		matchupArr.forEach(matchup => {
 			i++;
-			console.log(matchup);
+			
 			let team = matchup['team'];
 			body += "<tr>"
 			body += "<td>" + i + "</td>";
@@ -69,11 +150,208 @@ const populateAdminSchedule = async () => {
 
 }
 
+const addRound = async () => {
+	let rounds = await db.collection('rounds');
+
+	let snapshot = await rounds.get();
+	
+	let data = {
+		scoring: $("#round_scoring_type").val(),
+		style: $("#round_style").val(),
+		playersPerTeam: $("#round_matchup_team_player_count").val(),
+	}
+
+	rounds.doc((snapshot.size + 1).toString()).set(data);
+
+	populateAdminRounds();
+
+}
+
+const displayAdminRound = async (roundId) => {
+
+	let round = await db.collection('rounds').doc(roundId.toString());
+
+	let snapshot = await round.get();
+
+	let data = await snapshot.data();
+
+	$("#add_new_matchups").attr('hidden', false);
+
+	$(".round_number").html("<h3>Round " + snapshot.id +"</h3>" + data.style.replace("_", " ") + " | " + data.scoring.replace("_", " ") + " | " + data.playersPerTeam + " players per team");
+
+	// let roundInfoHTML = "";
+	// roundInfoHTML= "<table class ='table'>"
+	// roundInfoHTML+= "<tr>"
+	// roundInfoHTML+= "<td>Style</td>"
+	// roundInfoHTML+= "<td>Scoring</td>"
+	// roundInfoHTML+= "<td>Players Per Team</td>"
+	// roundInfoHTML+= "</tr>"
+
+	// roundInfoHTML+= "<tr>"
+	// roundInfoHTML+= "<td>" + data.style + "</td>"
+	// roundInfoHTML+= "<td>" + data.scoring + "</td>"
+	// roundInfoHTML+= "<td>" + data.playersPerTeam + "</td>"
+	// roundInfoHTML+= "</tr>"
+	// roundInfoHTML+= "</table>"
+
+	// $("#round_information").html(roundInfoHTML);
+
+	displayRoundMatchupForAdmin(snapshot.id, data);
+	populateAddMatchupDropdowns(snapshot.id, data.playersPerTeam);
+	
+}
+
+const displayRoundMatchupForAdmin = async (round) => {
+
+	$("#current_round_matchups").html("");
+	
+	let matchups = await db.collection('rounds').doc(round).collection('matchups');
+
+	let snapshot = await matchups.get();
+
+
+	let html = "<table class = 'table'>"
+	html += "<tr><th>Red</th><th>Blue</th></tr>"
+
+	await snapshot.docs.forEach(async(d) => {
+
+		html += 
+			"<tr>" +
+				"<td>" + d.data().red.team.toString().replace(",", " & ") + "</td>" +
+				"<td>" + d.data().blue.team.toString().replace(",", " & ") + "</td>" +
+				"<td>" + "<button class='btn btn-danger' onClick='removeGroupingFromRound(\"" + d.id + "\"," + round + ")'>Remove Group</button>" + "</td>" +
+			"</tr>"
+	})
+
+	$("#current_round_matchups").html(html);
+
+}
+
+const removeGroupingFromRound = async (id, round) => {
+	await db.collection('rounds').doc(round.toString()).collection('matchups').doc(id).delete();
+	displayRoundMatchupForAdmin(round.toString());
+}
+
+const populateAddMatchupDropdowns = async (round, ppt) => {
+
+	currentRoundForAddingMatchup = round;
+
+	$("#red_team_dropdown_1").html("");
+	$("#blue_team_dropdown_1").html("");
+
+	$("#red_team_dropdown_2").html("");
+	$("#blue_team_dropdown_2").html("");
+
+	if(ppt == 2) {
+		$("#red_team_dropdown_2").attr('hidden', false);
+		$("#blue_team_dropdown_2").attr('hidden', false);
+	} else {
+		$("#red_team_dropdown_2").attr('hidden', true);
+		$("#blue_team_dropdown_2").attr('hidden', true);
+	}
+
+	//now figuring out the dropdowns for new matchups
+	redGolfers = [];
+	blueGolfers = [];
+
+	let golfers = await db.collection('golfers');
+
+	let golfersSnapshot = await golfers.get();
+
+	await golfersSnapshot.docs.map(golfer => {
+
+		if(golfer.data().team == "red") {
+			redGolfers.push(golfer);
+		} else {
+			blueGolfers.push(golfer);
+		}
+
+	});
+
+	//if 2 players per matchup, need to duplicate the lists, basically. or at least make 2 of them populateable
+
+	await blueGolfers.forEach(async(bg) => {
+
+		await golfers.doc(bg.id).get().then(r => {
+			$("#blue_team_dropdown_1").append("<option value = '" + bg.id + "'>" + r.data().name + "</option>");
+		});
+
+	})
+
+	await redGolfers.forEach(async(rg) => {
+
+		await golfers.doc(rg.id).get().then(r => {
+			$("#red_team_dropdown_1").append("<option value = '" + rg.id + "'>" + r.data().name + "</option>");
+		});
+				
+	})
+
+	if(ppt == 2) {
+
+		await blueGolfers.forEach(async(bg) => {
+
+			await golfers.doc(bg.id).get().then(r => {
+				$("#blue_team_dropdown_2").append("<option value = '" + bg.id + "'>" + r.data().name + "</option>");
+			});
+
+		})
+
+		await redGolfers.forEach(async(bg) => {
+
+			await golfers.doc(bg.id).get().then(r => {
+				$("#red_team_dropdown_2").append("<option value = '" + bg.id + "'>" + r.data().name + "</option>");
+			});
+
+		})
+	}
+
+}
+
+const retrieveGolfers2456456456 = async () => {
+	return new Promise(async function(resolve, reject) {
+		resolve(fetchGolfers());
+	})
+}
+
+const addMatchup = async () => {
+
+	let round = await db.collection('rounds').doc(currentRoundForAddingMatchup.toString());
+	let snapshot = await round.get();
+
+	let ppt = snapshot.data().playersPerTeam;
+
+	redPlayers = [] 
+	redPlayers.push($("#red_team_dropdown_1 :selected").val());
+	bluePlayers = []
+	bluePlayers.push($("#blue_team_dropdown_1 :selected").val());
+
+	if(ppt == 2) {
+		redPlayers.push($("#red_team_dropdown_2 :selected").val());
+		bluePlayers.push($("#blue_team_dropdown_2 :selected").val());
+	}
+
+	updateData = {
+		red: {
+			team: redPlayers,
+			score: 0
+		},
+		blue: {
+			team: bluePlayers,
+			score: 0
+		}
+	}
+
+	let matchups = await db.collection('rounds').doc(currentRoundForAddingMatchup.toString()).collection('matchups')
+
+	let matchupSize = await matchups.get().then(shard => {
+		return shard.size;
+	});
+	
+	await matchups.doc().set(updateData);
+
+}
+
 const addNewMatchup = async () => {
-	console.log($("#new_blue_player_1").val());
-	console.log($("#new_blue_player_2").val());
-	console.log($("#new_red_player_1").val());
-	console.log($("#new_red_player_2").val());
 
 	let blue1 = $("#new_blue_player_1").val()
 	let blue2 = $("#new_blue_player_2").val()
@@ -181,6 +459,7 @@ const setupAllMatchups = async function(req, res) {
 
 }
 
+
 const generateMatchups = async () => {
 	
 	let matchups = await db.collection('matchups');
@@ -209,149 +488,4 @@ const generateMatchups = async () => {
 
 	return await finalArr;
 	
-}
-
-async function loadMatchupsForLineSetting(week) {
-	if(week != "select") {
-		games = [];
-		weekGames = schedule.fullgameschedule.gameentry.filter(e => e.week == week);
-		let i = 0;
-		weekGames.forEach(g => {
-			games[i] = new Game(g.id, g.awayTeam, g.homeTeam, g.date, g.time, getLine(week, g.awayTeam), getLine(week, g.homeTeam));
-			i++;
-		})
-
-		thisWeek = new Week(week, games);
-		populateWeeklyScheduleForLines(thisWeek);
-	} else {
-		$("#this_week_games_admin").html("");
-	}
-}
-
-const changeThisLine = (gameId, idToChange, line, side) => {
-
-	let game = thisWeek.games.filter(g => g.id == gameId);
-	$("#" + idToChange).val(-line);
-
-	if(side=='away') {
-		game[0].awayLine = line / 1;
-		game[0].homeLine = -line / 1;
-	} else {
-		game[0].awayLine = -line / 1;
-		game[0].homeLine = line / 1;
-	}
-
-}
-
-const populateWeeklyScheduleForLines = async (thisWeek) => {
-
-	let thisWeekLines = getThisWeekLines(thisWeek.week);
-
-	$("#this_week_games_admin").html("");
-
-	thisWeekLines.then(
-		result => {
-
-			let table = TABLE_OPEN;
-
-			let data = "";
-
-			let week = result;
-
-			thisWeek.games.forEach(g => {
-
-				try {
-
-					if(week.game[g.id] != null ) {
-						
-						g.awayLine = week.game[g.id].away_team.line;
-						g.homeLine = week.game[g.id].home_team.line;
-			
-					} else {
-						g.awayLine = 1.5;
-						g.homeLine = -1.5;
-					}
-				
-				} catch {
-					console.log('Lines not yet set for this week: ' + thisWeek.week);
-				}
-
-				data += TR_OPEN + 
-					getTeamCard(g.awayTeam, g.id) +
-					TD_OPEN + "<input class = 'line' id='" + g.id + "_" + g.awayTeam.Abbreviation + "' gameId='" + g.id + "' abbr='" + g.awayTeam.Abbreviation + "' nickname='" + g.awayTeam.Name + "' homeAway='AWAY' oninput='changeThisLine(" + g.id + "," + "\"" + g.id + "_" + g.homeTeam.Abbreviation + "\"" + ", this.value, \"away\")' type='number' step='1' size='4' value='" + g.awayLine + "'>" + TD_CLOSE +
-					TD_OPEN + "@" + TD_CLOSE + 
-					getTeamCard(g.homeTeam, g.id) +
-					TD_OPEN + "<input class = 'line' id='" + g.id + "_" + g.homeTeam.Abbreviation + "' gameId='" + g.id + "' abbr='" + g.homeTeam.Abbreviation + "' nickname='" + g.homeTeam.Name + "' homeAway='HOME' oninput='changeThisLine(" + g.id + "," + "\"" + g.id + "_" + g.awayTeam.Abbreviation + "\"" + ", this.value, \"home\")' type='number' step='1' size='4' value='" + g.homeLine + "'>" + TD_CLOSE +
-					TD_OPEN + g.date + TD_CLOSE +
-					TD_OPEN + g.time + TD_CLOSE +
-				TR_CLOSE
-			})
-
-			table += data;
-			table += TABLE_CLOSE;
-
-			$("#this_week_games_admin").html(table);
-		},
-		error => {
-			console.log(error);
-		});
-	
-}
-
-const reviewLines = () => {
-
-	let lines = [ ...$(".line")];
-	
-	let allIds = new Set();
-	// let uniqueIds = new Set[...]
-	lines.forEach(l => {
-		allIds.add(l.getAttribute("gameId"));
-
-	});
-	let pushLineUpdate = [];
-
-	let data = {};
-	allIds.forEach(id => {
-
-		let idLines = lines.filter(l => l.getAttribute("gameId") == id);
-
-		let away = idLines.filter(l => l.getAttribute('homeaway') == "AWAY");
-		let home = idLines.filter(l => l.getAttribute('homeaway') == "HOME")
-
-		data[id] = {
-			away_team: {
-				line: away[0].value,
-				name: away[0].getAttribute('nickname')
-			},
-			home_team: {
-				line: home[0].value,
-				name: home[0].getAttribute('nickname')
-			}
-		}
-
-	})
-
-	let weekUpdate = {}
-
-	let game = {
-		game:data
-	}
-
-	weekUpdate[$("#select_week_dropdown_admin").val()] = {
-		game :
-			data
-	}
-
-	let fs = firebase.firestore();
-	
-	let linesCollection = fs.collection('lines');//('lines/201920/week/1/game/51461/away_team/line');
-	
-	let year = linesCollection.doc('201920');
-
-	let week = year.collection('week');
-
-	let weekOne = week.doc($("#select_week_dropdown_admin").val());
-
-	let setDoc = weekOne.set(game);
-
 }

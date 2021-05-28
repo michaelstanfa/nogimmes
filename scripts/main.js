@@ -32,12 +32,13 @@ function HeadToHead(id, pairOne, pairTwo) {
 	this.pairTwo = pairTwo;
 }
 
-
+//throw in the correct round
 const loadMatchupTable = async () => {
 	
-
+	//pass round into here
 	let retrievedMatchups = await retrieveMatchups();
 
+	//also figure out singles or doubles
 	setupScorecard(retrievedMatchups);
 
 }
@@ -60,6 +61,7 @@ const setupScorecard = async (matchups) => {
 
 			matchNum++;
 
+			//need to know singles or doubles
 			let team = matchup['team'];
 
 			let rowColor = '#b3b3b3';
