@@ -307,12 +307,6 @@ const populateAddMatchupDropdowns = async (round, ppt) => {
 
 }
 
-const retrieveGolfers2456456456 = async () => {
-	return new Promise(async function(resolve, reject) {
-		resolve(fetchGolfers());
-	})
-}
-
 const addMatchup = async () => {
 
 	let round = await db.collection('rounds').doc(currentRoundForAddingMatchup.toString());
@@ -348,6 +342,10 @@ const addMatchup = async () => {
 	});
 	
 	await matchups.doc().set(updateData);
+
+	displayRoundMatchupForAdmin(currentRoundForAddingMatchup.toString());
+
+
 
 }
 
