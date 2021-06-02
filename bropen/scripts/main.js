@@ -129,10 +129,6 @@ const openUserModal = (info, id) => {
 
 }
 
-const openPictureModal = () => {
-	$("#rain-modal").modal("show");
-}
-
 const submitCurrentScores = async () => {
 	
 	let matchups = await db.collection("matchups");
@@ -200,10 +196,8 @@ const submitCurrentScores = async () => {
 		} else {
 			if(b != 0 & r != 0){
 				tie ++;	
-			}
-			
+			}	
 		}
-
 	}
 
 	if(blue_wins > red_wins) {
@@ -222,15 +216,11 @@ const submitCurrentScores = async () => {
 
 	ties = tie;
 
-
-
 	blue.score = blue_wins;
 	red.score = red_wins;
 
 	blue.scores = blue_score;
 	red.scores = red_score;
-
-
 
 	db.collection("matchups").doc(id.toString()).set({
 		team: {blue, red, advantage, ties}

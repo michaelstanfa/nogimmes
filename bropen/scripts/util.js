@@ -77,3 +77,14 @@ const calculateHeadToHeadAdvantage = async (matchId) => {
 	result.then(r => console.log(r));
 
 }
+
+const showPage = async(page) => {
+
+	console.log(page);
+
+	$("#golfers").attr("hidden", true);
+	$("#rounds").attr("hidden", true);
+	$("#scoreboard").attr("hidden", true);
+
+	$("#" + page).attr("hidden", false);
+}

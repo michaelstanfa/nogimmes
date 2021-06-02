@@ -6,8 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link rel="icon" href="./images/bropen-gold.jpg">
   <link rel="apple-touch-icon" href="./images/bropen-gold.jpg">
-
-
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="shortcut icon" sizes="196x196" href="./images/bropen-gold.jpg">
   <link rel="shortcut icon" sizes="128x128" href="./images/bropen-gold.jpg">
@@ -28,11 +26,16 @@
   <script src="./scripts/admin.js"></script>
   <script src="./scripts/main.js"></script>
   <script src="./scripts/util.js"></script>
+  <script src="./scripts/golfers.js"></script>
+  <script src="./scripts/scoreboard.js"></script>
   
 
   <script type = "text/javascript">
 	// window.onload = loadData();
   $(document).ready(function() {
+    populateGolfersForIndex();
+    loadScoreboard();
+    loadGolfers();
     loadMatchupTable();
   })
 </script>
@@ -53,35 +56,44 @@ table {
 
 </style>
 
+<div>
+  <h1>Bropen</h1>
+  <div>
+    <button class = "btn btn-link" onClick="showPage('scoreboard')">Scoreboard</button> | 
+    <button class = "btn btn-link" onClick="showPage('golfers')">Golfers</button> | 
+    <button class = "btn btn-link" onClick="showPage('rounds')">Rounds</button>
+  </div>
+</div>
+
+<hr>
+
 <body class="container main">
 
-  <div>
-    <h1>Bropen 2021</h1>
+    <div id = "scoreboard">
+      <div>
+        <h5>Scores</h5>
 
-    <hr>
-
-    <div>
-      <h4>Round</h4>
-      <button class= "btn btn-secondary btn-sm" round='1'>First</button>
-      <button class= "btn btn-secondary btn-sm" round='2'>Second</button>
-      <button class= "btn btn-secondary btn-sm" round='3'>Third</button>
-      <button class= "btn btn-secondary btn-sm" round='4'>Fourth</button>
-      
+      </div>
+      <hr>
+      <div>
+        <h5>Scorecards</h5>
+      </div>
     </div>
-    <br>
+    <div id = "golfers" hidden></div>
+    <div id = "rounds" hidden>
+      <div id = "round_buttons">
+        <div>
+          <h4>Round</h4>
+          <button class= "btn btn-secondary btn-sm" round='1'>First</button>
+          <button class= "btn btn-secondary btn-sm" round='2'>Second</button>
+          <button class= "btn btn-secondary btn-sm" round='3'>Third</button>
+          <button class= "btn btn-secondary btn-sm" round='4'>Fourth</button>
+          
+        </div>
+      </div>
+      <div id = "matchuptable"></div>
+    </div>
     
-    <div id = "matchuptable"></div>
-
-  </div>
-</body>
-
-
-
-  <div class="container">
-  
-
-
-    <div id = "matchup_table"></div>
     <!-- Trigger the modal with a button -->
 
     <!-- Modal -->
@@ -150,6 +162,8 @@ table {
         </div>
       </div>
     </div>
+
+  <div id="footer"></div>
 
   <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
 
