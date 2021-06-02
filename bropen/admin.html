@@ -19,18 +19,14 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
 <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
-  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+ <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
 
-  <link rel="stylesheet" src="/app.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
-
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
-  <!-- <script src="props.js"></script> -->
+  <link rel="stylesheet" href="./app.css">
 
   <script src="./scripts/admin.js"></script>
   <script src="./scripts/main.js"></script>
@@ -177,8 +173,13 @@ table {
     <div id='add_new_matchups' hidden>
       <br>
       
-      <h5>Current Round Matchups</h5>
+      <h4>Current Round Matchups</h5>
       <div id = "current_round_matchups">
+        <table class = "table">
+          <tbody id ='current_matchup_rows'>
+            
+        </table>
+        
         
       </div>
 
@@ -219,31 +220,6 @@ table {
       <br>
       
       <hr>
-        <!-- <h5>Add Matchup</h5>
-        <tr>
-        <th>Blue - Player 1</th>
-        <th>Blue - Player 2</th>
-        <th>Red - Player 1</th>
-        <th>Red - Player 2</th>
-        </tr>
-        <tr>
-          <td><input id='new_blue_player_1'></td>
-          <td><input id='new_blue_player_2'></td>
-          <td><input id='new_red_player_1'></td>
-          <td><input id='new_red_player_2'></td>
-        </tr>
-
-      <hr/>
-      <tr><td><button onClick = 'addNewMatchup()'>Add Matchup</button></td></tr>
-      </table>
-      <br>
-      
-      <div id='current_matchups'>
-
-        <table><tr><th>#</th><th>Blue Team</th><th>Red Team</th></tr></table>
-      
-    
-      </div> -->
 
     </div>
   </div>

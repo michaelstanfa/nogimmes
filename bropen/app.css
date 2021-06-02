@@ -13,20 +13,45 @@ body {cursor: pointer};
 
 .main {
   overflow: auto;
-  padding-bottom: 10px; /* must be same height as the footer */
-  background-color:red;
+  padding-bottom: 10px;
 }
 
-table, th, td, tr {
-  border: 1px solid black;
-  border-collapse:collapse;
-  color: white;
+tbody {
+	width: 100%;
+}
+
+.scorecard_table {
+	/* background-color: orangered; */
+	border-collapse: collapse;
+	/* border: 1px solid black; */
+	max-width: 100%;
+	min-width: 25%;
+}
+
+td.scorecard, tr.scorecard {
+	border-collapse: collapse;
+	border: 1px solid black;
+	text-align: center;
+	min-width: 25px;
+}
+
+td.scorecard_labels {
+	min-width: 100px;
+	border-collapse: collapse;
+	border: 1px solid black;
+	text-align: center;
+}
+
+.scoreboard_table {
+	
+	border-collapse: collapse;
+	border:1px solid black;
+	max-width: 100%;
+	min-width: 25%;
+
 }
 
 button {
 	margin: 5px
 }
 
-.blue {
-	background-color:#ffb3b3;
-}

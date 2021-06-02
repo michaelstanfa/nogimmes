@@ -33,13 +33,15 @@ function HeadToHead(id, pairOne, pairTwo) {
 }
 
 //throw in the correct round
-const loadMatchupTable = async () => {
+const loadMatchupTable = async (round) => {
+
+	$("#round_display").html("<h3>Round " + round + "</h3>");
 	
 	//pass round into here
-	let retrievedMatchups = await retrieveMatchups();
+	let retrievedMatchups = await retrieveMatchups(round);
 
 	//also figure out singles or doubles
-	setupScorecard(retrievedMatchups);
+	setupScorecard(retrievedMatchups, round);
 
 }
 
@@ -50,64 +52,62 @@ const createMatchup = (id, blue1, blue2, red1, red2) => {
 	matches.push(h2h);
 }
 
-const setupScorecard = async (matchups) => {
+const setupScorecard = async (matchups, round) => {
 	html = "<div>";
 	html = "<table style=\"overflow:auto\">";
   	body = "";
 
-	matchNum = 0;
-	await matchups[matchups.length - 1].then(async (matchupArr) => {
-		await matchupArr.forEach(async (matchup) => {
+	// matchNum = 0;
+	// await matchups[matchups.length - 1].then(async (matchupArr) => {
+	// 	await matchupArr.forEach(async (matchup) => {
 
-			matchNum++;
+	// 		matchNum++;
 
-			//need to know singles or doubles
-			let team = matchup['team'];
+	// 		//need to know singles or doubles
+	// 		let team = matchup['team'];
 
-			let rowColor = '#b3b3b3';
-			if(team.advantage.team == 'Blue') {
-				rowColor = '#00DCFF';
-			} else if (team.advantage.team == 'Red') {
-				rowColor = '#FF8A8A';
-			}
+	// 		let rowColor = "#d3d3d3";
+	// 		// if(team.advantage.team == 'Blue') {
+	// 		// 	rowColor = '#00DCFF';
+	// 		// } else if (team.advantage.team == 'Red') {
+	// 		// 	rowColor = '#FF8A8A';
+	// 		// }
 
-			body += "<tr bgcolor = " + rowColor + ">";
-			// body += TD_OPEN + matchNum + TD_CLOSE;
+	// 		body += "<tr bgcolor = " + rowColor + ">";
+	// 		// body += TD_OPEN + matchNum + TD_CLOSE;
 
-			let totalHoles = team.blue.score + team.red.score + team.ties;
+	// 		// let totalHoles = team.blue.score + team.red.score + team.ties;
 
-			body += "<td align='center'>" + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
-			body += "<td align='center'><b>" + team.blue.score + " - " + team.red.score + "</b><br>thru " + totalHoles + "<br><button class='btn btn-info' onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button>" + TD_CLOSE;
-			body += "<td align='center'>" + team.red.member1.name + br + team.red.member2.name + TD_CLOSE + "</tr>"
-			body += TR_CLOSE;
+	// 		// body += "<td align='center'>" + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
+	// 		// body += "<td align='center'><b>" + team.blue.score + " - " + team.red.score + "</b><br>thru " + totalHoles + "<br><button class='btn btn-info' onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button>" + TD_CLOSE;
+	// 		// body += "<td align='center'>" + team.red.member1.name + br + team.red.member2.name + TD_CLOSE + "</tr>"
+	// 		// body += TR_CLOSE;
 
-		});
+	// 	});
 
-		let total = "";
-		total += TR_OPEN;
-		// total += TH_OPEN + TH_CLOSE;
-		total += "<td align = 'center'><h5>" + "BLUE" + "<h5></td>";
-		total += "<td align = 'center'><h5>" + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + "<h5>" + TD_CLOSE;
-		total += "<td align = 'center'><h5>" + "RED " + "</h5>" + TD_CLOSE;
-		total += TR_CLOSE;
+	// 	let total = "";
+	// 	total += TR_OPEN;
+	// 	// total += TH_OPEN + TH_CLOSE;
+	// 	total += "<td align = 'center'><h5>" + "BLUE" + "<h5></td>";
+	// 	total += "<td align = 'center'><h5>" + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + "<h5>" + TD_CLOSE;
+	// 	total += "<td align = 'center'><h5>" + "RED " + "</h5>" + TD_CLOSE;
+	// 	total += TR_CLOSE;
 
-		let holeCount = "";
-		holeCount += TR_OPEN;
-		// holeCount += TH_OPEN + TH_CLOSE;
-		holeCount += "<td align = 'center'><h5>" + "Hole Count" + "<h5></td>";;
-		holeCount += "<td align = 'center'><h5>" + await calculateTotalHolesWon("blue", matchups) + " - " + await calculateTotalHolesWon("red", matchups) + "<h5></td>";;
-		holeCount += "<td align = 'center'><h5>" + "<h5></td>";;
-		holeCount += TR_CLOSE;
+	// 	let holeCount = "";
+	// 	holeCount += TR_OPEN;
+	// 	// holeCount += TH_OPEN + TH_CLOSE;
+	// 	holeCount += "<td align = 'center'><h5>" + "Hole Count" + "<h5></td>";;
+	// 	holeCount += "<td align = 'center'><h5>" + await calculateTotalHolesWon("blue", matchups) + " - " + await calculateTotalHolesWon("red", matchups) + "<h5></td>";;
+	// 	holeCount += "<td align = 'center'><h5>" + "<h5></td>";;
+	// 	holeCount += TR_CLOSE;
 
-		html += total;
-		html += body;
-		html += holeCount;
+	// 	html += total;
+	// 	html += body;
+	// 	html += holeCount;
 
-		html += TABLE_CLOSE + "</div>"
+	// 	html += TABLE_CLOSE + "</div>"
 
-		$("#matchuptable").html(html);
-
-	})		
+	// 	$("#matchuptable").html(html);		
 
 }
 

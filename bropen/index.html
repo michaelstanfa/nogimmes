@@ -10,15 +10,18 @@
   <link rel="shortcut icon" sizes="196x196" href="./images/bropen-gold.jpg">
   <link rel="shortcut icon" sizes="128x128" href="./images/bropen-gold.jpg">
 
+  <link rel="stylesheet" href="app.css">
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <link rel="stylesheet" src="/app.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
 
   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
 
@@ -36,7 +39,7 @@
     populateGolfersForIndex();
     loadScoreboard();
     loadGolfers();
-    loadMatchupTable();
+    loadMatchupTable(1);
   })
 </script>
 </head>
@@ -73,6 +76,42 @@ table {
       <div>
         <h5>Scores</h5>
 
+        <table class = "table">
+
+          <tr>
+            <td></td>
+            <th>Blue</th>
+            <th>Red</th>
+          </tr>
+
+          <tr>
+            <td>Round 1</td>
+            <td id = "blue_round_1_points"></td>
+            <td id = "red_round_1_points"></td>
+          </tr>
+          <tr>
+            <td>Round 2</td>
+            <td id = "blue_round_2_points"></td>
+            <td id = "red_round_2_points"></td>
+          </tr>
+          <tr>
+            <td>Round 3</td>
+            <td id = "blue_round_3_points"></td>
+            <td id = "red_round_3_points"></td>
+          </tr>
+          <tr>
+            <td>Round 4</td>
+            <td id = "blue_round_4_points"></td>
+            <td id = "red_round_4_points"></td>
+          </tr>
+          <tr>
+            <th>Total</th>
+            <th id = "blue_total_points"></th>
+            <th id = "red_total_points"></th>
+          </tr>
+
+        </table>
+
       </div>
       <hr>
       <div>
@@ -83,15 +122,1048 @@ table {
     <div id = "rounds" hidden>
       <div id = "round_buttons">
         <div>
-          <h4>Round</h4>
-          <button class= "btn btn-secondary btn-sm" round='1'>First</button>
-          <button class= "btn btn-secondary btn-sm" round='2'>Second</button>
-          <button class= "btn btn-secondary btn-sm" round='3'>Third</button>
-          <button class= "btn btn-secondary btn-sm" round='4'>Fourth</button>
+          <p class = "green">Select round to view</p>
+          <button class= "btn btn-secondary btn-sm" onClick='loadMatchupTable(1)' round='1'>First Round</button>
+          <button class= "btn btn-secondary btn-sm" onClick='loadMatchupTable(2)' round='2'>Second Round</button>
+          <button class= "btn btn-secondary btn-sm" onClick='loadMatchupTable(3)' round='3'>Third Round</button>
+          <button class= "btn btn-secondary btn-sm" onClick='loadMatchupTable(4)' round='4'>Fourth Round</button>
           
         </div>
+        <hr>
       </div>
-      <div id = "matchuptable"></div>
+      <div id ="round_display"></div>
+      <div id = "matchuptable">
+        <table class = "scorecard_table" > <!--"scorecard_table" -->
+          
+          <tr class="scorecard_labels">
+            <td class = "scorecard_labels">
+
+            </td>
+            <td class = "scorecard_labels">
+              Par
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+
+          </tr>
+          <tr>
+            <td class = "scorecard_labels">
+              Team
+            </td>
+            <td class = "scorecard_labels">
+              Hole
+            </td>
+            </td>
+
+            <td class = "scorecard">
+              1
+            </td>
+            <td class = "scorecard">
+              2
+            </td>
+            <td class = "scorecard">
+              3
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              5
+            </td>
+            <td class = "scorecard">
+              6
+            </td>
+            <td class = "scorecard">
+              7
+            </td>
+            <td class = "scorecard">
+              8
+            </td>
+            <td class = "scorecard">
+              9
+            </td>
+            <td class = "scorecard">
+              10
+            </td>
+            <td class = "scorecard">
+              11
+            </td>
+            <td class = "scorecard">
+              12
+            </td>
+            <td class = "scorecard">
+              13
+            </td>
+            <td class = "scorecard">
+              14
+            </td>
+            <td class = "scorecard">
+              15
+            </td>
+            <td class = "scorecard">
+              16
+            </td>
+            <td class = "scorecard">
+              17
+            </td>
+            <td class = "scorecard">
+              18
+            </td>
+          </tr>
+          <tr>
+            <td class = "scorecard_labels">
+              Red
+            </td>
+            <td class = "scorecard_labels">
+              Michael Stanfa & Colin Thomas
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+          </tr>
+          <tr>
+            <td class = "scorecard_labels">
+              Blue
+            </td>
+            <td class = "scorecard_labels">
+              Andy Mullan & Nick Kollauf
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+          </tr>
+          
+        </table>
+
+        <br>
+
+        <table class = "scorecard_table" > <!--"scorecard_table" -->
+            
+            <tr class="scorecard_labels">
+              <td class = "scorecard_labels">
+
+              </td>
+              <td class = "scorecard_labels">
+                Par
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+
+            </tr>
+            <tr>
+              <td class = "scorecard_labels">
+                Team
+              </td>
+              <td class = "scorecard_labels">
+                Hole
+              </td>
+              </td>
+
+              <td class = "scorecard">
+                1
+              </td>
+              <td class = "scorecard">
+                2
+              </td>
+              <td class = "scorecard">
+                3
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                5
+              </td>
+              <td class = "scorecard">
+                6
+              </td>
+              <td class = "scorecard">
+                7
+              </td>
+              <td class = "scorecard">
+                8
+              </td>
+              <td class = "scorecard">
+                9
+              </td>
+              <td class = "scorecard">
+                10
+              </td>
+              <td class = "scorecard">
+                11
+              </td>
+              <td class = "scorecard">
+                12
+              </td>
+              <td class = "scorecard">
+                13
+              </td>
+              <td class = "scorecard">
+                14
+              </td>
+              <td class = "scorecard">
+                15
+              </td>
+              <td class = "scorecard">
+                16
+              </td>
+              <td class = "scorecard">
+                17
+              </td>
+              <td class = "scorecard">
+                18
+              </td>
+            </tr>
+            <tr>
+              <td class = "scorecard_labels">
+                Red
+              </td>
+              <td class = "scorecard_labels">
+                Michael Stanfa & Colin Thomas
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+            </tr>
+            <tr>
+              <td class = "scorecard_labels">
+                Blue
+              </td>
+              <td class = "scorecard_labels">
+                Andy Mullan & Nick Kollauf
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+            </tr>
+            
+        </table>
+
+        <br>
+
+        <table class = "scorecard_table" > <!--"scorecard_table" -->
+          
+          <tr class="scorecard_labels">
+            <td class = "scorecard_labels">
+
+            </td>
+            <td class = "scorecard_labels">
+              Par
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+
+          </tr>
+          <tr>
+            <td class = "scorecard_labels">
+              Team
+            </td>
+            <td class = "scorecard_labels">
+              Hole
+            </td>
+            </td>
+
+            <td class = "scorecard">
+              1
+            </td>
+            <td class = "scorecard">
+              2
+            </td>
+            <td class = "scorecard">
+              3
+            </td>
+            <td class = "scorecard">
+              4
+            </td>
+            <td class = "scorecard">
+              5
+            </td>
+            <td class = "scorecard">
+              6
+            </td>
+            <td class = "scorecard">
+              7
+            </td>
+            <td class = "scorecard">
+              8
+            </td>
+            <td class = "scorecard">
+              9
+            </td>
+            <td class = "scorecard">
+              10
+            </td>
+            <td class = "scorecard">
+              11
+            </td>
+            <td class = "scorecard">
+              12
+            </td>
+            <td class = "scorecard">
+              13
+            </td>
+            <td class = "scorecard">
+              14
+            </td>
+            <td class = "scorecard">
+              15
+            </td>
+            <td class = "scorecard">
+              16
+            </td>
+            <td class = "scorecard">
+              17
+            </td>
+            <td class = "scorecard">
+              18
+            </td>
+          </tr>
+          <tr>
+            <td class = "scorecard_labels">
+              Red
+            </td>
+            <td class = "scorecard_labels">
+              Michael Stanfa & Colin Thomas
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+          </tr>
+          <tr>
+            <td class = "scorecard_labels">
+              Blue
+            </td>
+            <td class = "scorecard_labels">
+              Andy Mullan & Nick Kollauf
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+            
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+            <td class = "scorecard">
+              
+            </td>
+          </tr>
+          
+        </table>
+
+        <br>
+
+        <table class = "scorecard_table" > <!--"scorecard_table" -->
+            
+            <tr class="scorecard_labels">
+              <td class = "scorecard_labels">
+
+              </td>
+              <td class = "scorecard_labels">
+                Par
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+
+            </tr>
+            <tr>
+              <td class = "scorecard_labels">
+                Team
+              </td>
+              <td class = "scorecard_labels">
+                Hole
+              </td>
+              </td>
+
+              <td class = "scorecard">
+                1
+              </td>
+              <td class = "scorecard">
+                2
+              </td>
+              <td class = "scorecard">
+                3
+              </td>
+              <td class = "scorecard">
+                4
+              </td>
+              <td class = "scorecard">
+                5
+              </td>
+              <td class = "scorecard">
+                6
+              </td>
+              <td class = "scorecard">
+                7
+              </td>
+              <td class = "scorecard">
+                8
+              </td>
+              <td class = "scorecard">
+                9
+              </td>
+              <td class = "scorecard">
+                10
+              </td>
+              <td class = "scorecard">
+                11
+              </td>
+              <td class = "scorecard">
+                12
+              </td>
+              <td class = "scorecard">
+                13
+              </td>
+              <td class = "scorecard">
+                14
+              </td>
+              <td class = "scorecard">
+                15
+              </td>
+              <td class = "scorecard">
+                16
+              </td>
+              <td class = "scorecard">
+                17
+              </td>
+              <td class = "scorecard">
+                18
+              </td>
+            </tr>
+            <tr>
+              <td class = "scorecard_labels">
+                Red
+              </td>
+              <td class = "scorecard_labels">
+                Michael Stanfa & Colin Thomas
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+            </tr>
+            <tr>
+              <td class = "scorecard_labels">
+                Blue
+              </td>
+              <td class = "scorecard_labels">
+                Andy Mullan & Nick Kollauf
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+              
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+              <td class = "scorecard">
+                
+              </td>
+            </tr>
+            
+        </table>
+
+      </div>
     </div>
     
     <!-- Trigger the modal with a button -->

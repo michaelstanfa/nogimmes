@@ -50,7 +50,7 @@ const populateGolfersForIndex = async () => {
 	if(allGolfers.length != 0) {
 
 		golfersHtml = "<h5>Golfers</h5>";
-		golfersHtml += "<table class='table'>";
+		golfersHtml += "<table class='table center'>";
 		golfersHtml += "<tr>";
 		golfersHtml += "<th>Name</th>"
 		golfersHtml += "<th>Team</th>"

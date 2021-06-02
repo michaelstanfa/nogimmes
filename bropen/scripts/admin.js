@@ -40,9 +40,9 @@ const addGolfer = async(name, team) => {
 
 }
 
-const retrieveMatchups = async () => {
+const retrieveMatchups = async (round) => {
 	return new Promise(async function(resolve, reject){
-		resolve(setupAllMatchups());
+		resolve(setupAllMatchups(round));
 	})
 }
 
@@ -111,23 +111,6 @@ const displayAdminRound = async (roundId) => {
 
 	$(".round_number").html("<h3>Round " + snapshot.id +"</h3>" + data.style.replace("_", " ") + " | " + data.scoring.replace("_", " ") + " | " + data.playersPerTeam + " players per team");
 
-	// let roundInfoHTML = "";
-	// roundInfoHTML= "<table class ='table'>"
-	// roundInfoHTML+= "<tr>"
-	// roundInfoHTML+= "<td>Style</td>"
-	// roundInfoHTML+= "<td>Scoring</td>"
-	// roundInfoHTML+= "<td>Players Per Team</td>"
-	// roundInfoHTML+= "</tr>"
-
-	// roundInfoHTML+= "<tr>"
-	// roundInfoHTML+= "<td>" + data.style + "</td>"
-	// roundInfoHTML+= "<td>" + data.scoring + "</td>"
-	// roundInfoHTML+= "<td>" + data.playersPerTeam + "</td>"
-	// roundInfoHTML+= "</tr>"
-	// roundInfoHTML+= "</table>"
-
-	// $("#round_information").html(roundInfoHTML);
-
 	displayRoundMatchupForAdmin(snapshot.id, data);
 	populateAddMatchupDropdowns(snapshot.id, data.playersPerTeam);
 	
@@ -135,28 +118,55 @@ const displayAdminRound = async (roundId) => {
 
 const displayRoundMatchupForAdmin = async (round) => {
 
-	$("#current_round_matchups").html("");
+	$("#current_matchup_rows").html("");
 	
 	let matchups = await db.collection('rounds').doc(round).collection('matchups');
-
 	let snapshot = await matchups.get();
 
+	var tbodyRef = document.getElementById('current_matchup_rows');
 
-	let html = "<table class = 'table'>"
-	html += "<tr><th>Red</th><th>Blue</th></tr>"
+	var headerRow = tbodyRef.insertRow();
+	var blueHeader = headerRow.insertCell();
+	var redHeader = headerRow.insertCell();
+	var lastHeader = headerRow.insertCell();
 
-	await snapshot.docs.forEach(async(d) => {
+	blueHeader.appendChild(document.createTextNode("Red"));
+	redHeader.appendChild(document.createTextNode("Blue"));
+	lastHeader.appendChild(document.createTextNode(""));
 
-		html += 
-			"<tr>" +
-				"<td>" + d.data().red.team.toString().replace(",", " & ") + "</td>" +
-				"<td>" + d.data().blue.team.toString().replace(",", " & ") + "</td>" +
-				"<td>" + "<button class='btn btn-danger' onClick='removeGroupingFromRound(\"" + d.id + "\"," + round + ")'>Remove Group</button>" + "</td>" +
-			"</tr>"
+
+
+	snapshot.docs.forEach(async(d) => {
+
+		var newRow = tbodyRef.insertRow();
+
+		var redCell = newRow.insertCell();
+		var blueCell = newRow.insertCell();
+		var buttonCell = newRow.insertCell();
+
+		let redTeamList = await d.data().red.team.map(async m => await fetchUserName(m));
+		let blueTeamList = await d.data().blue.team.map(async m => await fetchUserName(m));
+		
+		let redTeam = await redTeamList[0] + (redTeamList.length == 2 ? " & " + await redTeamList[1] : "");
+		let blueTeam = await blueTeamList[0] + (blueTeamList.length == 2 ? " & " + await blueTeamList[1] : "");
+		let removeButton = $("<button class='btn btn-danger' onClick='removeGroupingFromRound(\"" + d.id + "\"," + round + ")'>Remove Group</button>");
+
+		redCell.appendChild(document.createTextNode(redTeam));
+		blueCell.appendChild(document.createTextNode(blueTeam))
+		removeButton.appendTo(buttonCell);
+
+	});
+}
+
+const fetchUserName = async (userName) => {
+	return new Promise(async function(resolve, reject){
+		resolve(fetchUser(userName));
 	})
+}
 
-	$("#current_round_matchups").html(html);
-
+const fetchUser = async (userName) => {
+	let user = await db.collection('golfers').doc(userName).get();
+	return user.data().name;
 }
 
 const removeGroupingFromRound = async (id, round) => {
@@ -383,18 +393,22 @@ const clearInput = (ele) => {
 	ele.val("");
 }
 
-const setupAllMatchups = async function(req, res) {
+const setupAllMatchups = async (round) => {
 
-	return await generateMatchups();
+	return await generateMatchups(round);
 
 }
 
 
-const generateMatchups = async () => {
+const generateMatchups = async (r) => {
 	
-	let matchups = await db.collection('matchups');
+	let matchups = db.collection('rounds').doc(r.toString()).collection('matchups');
 	
 	let snapshot = await matchups.get();
+
+	snapshot.docs.forEach(d => {
+		console.log(d);
+	});
 
 	let matchupArr = [];
 
