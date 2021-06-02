@@ -16,6 +16,10 @@ body {cursor: pointer};
   padding-bottom: 10px;
 }
 
+.overflow {
+	overflow: auto;
+}
+
 tbody {
 	width: 100%;
 }
