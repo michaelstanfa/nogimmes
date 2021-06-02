@@ -26,3 +26,7 @@ table, th, td, tr {
 button {
 	margin: 5px
 }
+
+.blue {
+	background-color:#ffb3b3;
+}

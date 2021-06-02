@@ -57,10 +57,9 @@ const populateGolfersForIndex = async () => {
 		golfersHtml += "<th></th>"
 		golfersHtml += "</tr>";
 		
-		allGolfers[allGolfers.length - 1].then(golfersArr => {
-			golfersArr.forEach(golfer => {
-				
-				golfersHtml += "<tr>";
+		allGolfers[allGolfers.length - 1].then(async(golfersArr) => {
+			golfersArr.forEach(async(golfer) => {
+				golfersHtml += "<tr bgcolor='" + (golfer.team == "red" ? "#FF8A8A" : "#00DCFF") + "'>";
 				golfersHtml += "<td>" + golfer.name + "</td>";
 				golfersHtml += "<td>" + golfer.team + "</td>";
 				golfersHtml += "</tr>";
@@ -73,7 +72,6 @@ const populateGolfersForIndex = async () => {
 		$("#golfers").html("");
 	}
 }
-
 
 const retrieveGolfers = async () => {
 	return new Promise(async function(resolve, reject) {
