@@ -58,27 +58,27 @@ const populateAdminRounds = async () => {
 
 	$("#admin_round_selector").html(adminRoundSelectorHTML);
 
-	let header = "<table class = 'table'><tr><th>#</th><th>Blue Team</th><th>Red Team</th></tr>";
+	// let header = "<table class = 'table'><tr><th>#</th><th>Blue Team</th><th>Red Team</th></tr>";
 
-	let body = "";
+	// let body = "";
 
-	let matchups = await retrieveMatchups();
+	// let matchups = await retrieveMatchups();
 
-	i = 0;
-	matchups[matchups.length - 1].then(matchupArr => {
-		matchupArr.forEach(matchup => {
-			i++;
+	// i = 0;
+	// matchups[matchups.length - 1].then(matchupArr => {
+	// 	matchupArr.forEach(matchup => {
+	// 		i++;
 			
-			let team = matchup['team'];
-			body += "<tr>"
-			body += "<td>" + i + "</td>";
-			body += "<td>" + team.blue.member1.name + " & " + team.blue.member2.name + "</td>";
-			body += "<td>" + team.red.member1.name + " & " + team.red.member2.name + "</td>";
-			body += "</tr>";	
-		});
-		adminMatchupHTML = header + body + "</table>"
-		$("#current_matchups").html(adminMatchupHTML);
-	})	
+	// 		let team = matchup['team'];
+	// 		body += "<tr>"
+	// 		body += "<td>" + i + "</td>";
+	// 		body += "<td>" + team.blue.member1.name + " & " + team.blue.member2.name + "</td>";
+	// 		body += "<td>" + team.red.member1.name + " & " + team.red.member2.name + "</td>";
+	// 		body += "</tr>";	
+	// 	});
+	// 	adminMatchupHTML = header + body + "</table>"
+	// 	$("#current_matchups").html(adminMatchupHTML);
+	// })	
 
 }
 
@@ -91,6 +91,7 @@ const addRound = async () => {
 		scoring: $("#round_scoring_type").val(),
 		style: $("#round_style").val(),
 		playersPerTeam: $("#round_matchup_team_player_count").val(),
+		course: $("#round_course").val(),
 	}
 
 	rounds.doc((snapshot.size + 1).toString()).set(data);
@@ -109,7 +110,7 @@ const displayAdminRound = async (roundId) => {
 
 	$("#add_new_matchups").attr('hidden', false);
 
-	$(".round_number").html("<h3>Round " + snapshot.id +"</h3>" + data.style.replace("_", " ") + " | " + data.scoring.replace("_", " ") + " | " + data.playersPerTeam + " players per team");
+	$(".round_number").html("<h3>Round " + snapshot.id +"</h3>" + data.course + " | " + data.style.replace("_", " ") + " | " + data.scoring.replace("_", " ") + " | " + data.playersPerTeam + " players per team");
 
 	displayRoundMatchupForAdmin(snapshot.id, data);
 	populateAddMatchupDropdowns(snapshot.id, data.playersPerTeam);
@@ -156,6 +157,56 @@ const displayRoundMatchupForAdmin = async (round) => {
 		removeButton.appendTo(buttonCell);
 
 	});
+}
+
+const addCourse = async (courseName) => {
+	let courses = await db.collection('courses');
+
+	let courseUserName = courseName.replace(/[^A-Za-z]/g, "");
+
+	let data = {
+		name: $("#course_name").val(),
+		par_1 : $('#course_hole_par_1').val(),
+		par_2 : $('#course_hole_par_2').val(),
+		par_3 : $('#course_hole_par_3').val(),
+		par_4 : $('#course_hole_par_4').val(),
+		par_5 : $('#course_hole_par_5').val(),
+		par_6 : $('#course_hole_par_6').val(),
+		par_7 : $('#course_hole_par_7').val(),
+		par_8 : $('#course_hole_par_8').val(),
+		par_9 : $('#course_hole_par_9').val(),
+		par_10 : $('#course_hole_par_10').val(),
+		par_11 : $('#course_hole_par_11').val(),
+		par_12 : $('#course_hole_par_12').val(),
+		par_13 : $('#course_hole_par_13').val(),
+		par_14 : $('#course_hole_par_14').val(),
+		par_15 : $('#course_hole_par_15').val(),
+		par_16 : $('#course_hole_par_16').val(),
+		par_17 : $('#course_hole_par_17').val(),
+		par_18 : $('#course_hole_par_18').val(),
+	}
+
+	courses.doc(courseUserName.toString().toLowerCase()).set(data);
+
+	populateAdminRounds();
+
+}
+
+const populateAdminCourses = async () => {
+	let courses = await db.collection('courses');
+	let coursesSnapshot = await courses.get();
+
+
+	// await golfers.doc(bg.id).get().then(r => {
+	// 	$("#blue_team_dropdown_1").append("<option value = '" + bg.id + "'>" + r.data().name + "</option>");
+	// });
+
+	await coursesSnapshot.docs.forEach(async(course) => {
+		course.data().name
+		$("#round_course").append("<option value = '" + course.id + "'>" + course.data().name + "</option>");
+		//console.log(course.data());
+	})
+
 }
 
 const fetchUserName = async (userName) => {

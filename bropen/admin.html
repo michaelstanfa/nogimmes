@@ -39,6 +39,7 @@
       // fetchRounds();
     
       populateGolfersForAdmin();
+      populateAdminCourses();
       populateAdminRounds();
       
     })
@@ -109,6 +110,75 @@ table {
 
   <hr>
 
+  
+
+  <div id='add_new_course'>
+
+    <h4>Add Course</h5>
+    <div class="border-bottom:10px">
+
+    <table class="table">
+      <tr>
+        <td>
+          Name
+        </td>
+        <td>
+          <input id ="course_name">
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">Hole</td>
+        <td class="center">1</td>
+        <td class="center">2</td>
+        <td class="center">3</td>
+        <td class="center">4</td>
+        <td class="center">5</td>
+        <td class="center">6</td>
+        <td class="center">7</td>
+        <td class="center">8</td>
+        <td class="center">9</td>
+        <td class="center">10</td>
+        <td class="center">11</td>
+        <td class="center">12</td>
+        <td class="center">13</td>
+        <td class="center">14</td>
+        <td class="center">15</td>
+        <td class="center">16</td>
+        <td class="center">17</td>
+        <td class="center">18</td>
+      </tr>
+      <tr>
+        <td colspan="2">Set Par</td>
+        <td><input class ="par-input-box" id ='course_hole_par_1' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_2' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_3' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_4' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_5' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_6' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_7' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_8' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_9' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_10' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_11' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_12' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_13' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_14' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_15' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_16' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_17' type ='number'></td>
+        <td><input class ="par-input-box" id ='course_hole_par_18' type ='number'></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <button class="btn btn-success btn-block" type="submit" onClick='addCourse($("#course_name").val())'>Add Course</button>
+        <td>
+      </tr>
+    </table>
+
+  </div>
+
+  </div>
+
   <div id='add_new_round'>
 
     <h4>Add Round</h5>
@@ -132,7 +202,7 @@ table {
         </td>
         <td>
           <select id ="round_style">
-            <option value = "best_ball">Best Ball</option>
+            <option value = "best_shot">Best Shot</option>
             <option value = "alternate_shot">Alternate Shot</option>
             <option value = "head_to_head">Head to Head</option>
           </select>
@@ -150,6 +220,17 @@ table {
         </td>
       </tr>      
       <tr>
+        <tr>
+          <td>
+            Course
+          </td>
+          <td>
+            <select id = "round_course">
+              
+            </select>
+          </td>
+        </tr>      
+        <tr>
         <td colspan="2">
           <button class="btn btn-success btn-block" type="submit" onClick='addRound()'>Add Round</button>
         <td>

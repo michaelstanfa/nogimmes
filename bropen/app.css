@@ -56,7 +56,18 @@ td.scorecard_labels {
 
 }
 
+.pull_right {
+	text-align: right;
+}
+
 button {
 	margin: 5px
 }
 
+.par-input-box{
+	max-width: 50px;
+}
+
+.center {
+	text-align: center
+}
