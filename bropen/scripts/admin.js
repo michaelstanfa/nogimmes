@@ -117,6 +117,15 @@ const displayAdminRound = async (roundId) => {
 	
 }
 
+const confirmScore = async (ele) => {
+	console.log(ele);
+	window.confirm(ele);
+}
+
+const editScores = (round, matchup, hole) => {
+	
+}
+
 const displayRoundMatchupForAdmin = async (round) => {
 
 	$("#current_matchup_rows").html("");

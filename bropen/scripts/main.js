@@ -111,9 +111,8 @@ const setupScorecard = async (matchups, round) => {
 
 }
 
-const openUserModal = (info, id) => {
+const editScores = (round, match, hole) => {
 
-	populateHoles();
 	$("#modal_submit_score").attr("team_index", id);
 	$("#modal-blue-team-names").html(info['team']['blue'].member1.name + " & " + info['team']['blue'].member2.name);
 	$("#modal-red-team-names").html(info['team']['red'].member1.name + " & " + info['team']['red'].member2.name);
