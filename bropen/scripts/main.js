@@ -1,4 +1,3 @@
-
 let thisWeek = null;
 let picks = null;
 let choices = null;
@@ -30,6 +29,15 @@ function HeadToHead(id, pairOne, pairTwo) {
 	this.id = id;
 	this.pairOne = pairOne;
 	this.pairTwo = pairTwo;
+}
+
+const showHideSection = async (sectionId) => {
+	if($('#' + sectionId).attr('hidden')) {
+		$('#' + sectionId).attr('hidden', false);
+	} else {
+		$('#' + sectionId).attr('hidden', true);
+	}
+	
 }
 
 //throw in the correct round

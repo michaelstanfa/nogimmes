@@ -10,26 +10,30 @@ function HeadToHead(id, pairOne, pairTwo) {
 	this.pairTwo = pairTwo;
 }
 
-function Golfer(id, name, team) {
+function Golfer(id, name, team, scorecardName) {
 	this.id = id;
 	this.name = name;
 	this.team = team;
+	this.scorecardName = scorecardName;
 }
 
 let currentRoundForAddingMatchup;
 
-const addGolfer = async(name, team) => {
+const addGolfer = async(name, team, scorecardName) => {
 
 	username = name.toLowerCase().replace(/[^A-Za-z]/g, "");
 
 	if(!name) {
 		alert('Please enter a name');
+	} else if (!scorecardName){
+		alert('Please enter a shorthand name for the scorecard label');
 	} else {
 	 	let golfers = await db.collection('golfers');
 
 		const golfer = {
 			name: name,
-			team: team
+			team: team,
+			scorecardName: scorecardName
 		}
 		
 		await golfers.doc(username).set(golfer);
@@ -122,7 +126,7 @@ const confirmScore = async (ele) => {
 	window.confirm(ele);
 }
 
-const editScores = (round, matchup, hole) => {
+const editHoleScore = (round, matchup, hole) => {
 	
 }
 

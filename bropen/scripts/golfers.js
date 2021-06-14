@@ -21,15 +21,18 @@ const populateGolfersForAdmin = async () => {
 		golfersHtml += "<tr>";
 		golfersHtml += "<th>Name</th>"
 		golfersHtml += "<th>Team</th>"
+		golfersHtml += "<th>Scorecard Name</th>"
 		golfersHtml += "<th></th>"
 		golfersHtml += "</tr>";
 		
 		allGolfers[allGolfers.length - 1].then(golfersArr => {
 			golfersArr.forEach(golfer => {
+				console.log(golfer);
 				
 				golfersHtml += "<tr>";
 				golfersHtml += "<td>" + golfer.name + "</td>";
 				golfersHtml += "<td>" + golfer.team + "</td>";
+				golfersHtml += "<td>" + golfer.scorecardName + "</td>";
 				golfersHtml += "<td><button class='btn btn-danger btn-sml' onClick=deleteGolfer(\"" + golfer.id + "\")>Delete Golfer</button></td>";
 				golfersHtml += "</tr>";
 			});
@@ -89,7 +92,7 @@ const fetchGolfers = async () => {
 		let g = golfers.doc(d.id).get();
 		golfersArr = [];
 		await g.then(r => {
-			golfersArr.push(new Golfer(d.id, r.data().name, r.data().team))
+			golfersArr.push(new Golfer(d.id, r.data().name, r.data().team, r.data().scorecardName))
 		})
 		
 		return golfersArr;

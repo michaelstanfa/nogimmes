@@ -72,8 +72,12 @@ table {
   
   <hr>
 
-  <div id='add_new_event_golfers'>
-    <h5>Add Golfer to Event</h5>
+
+  <div>
+    <h5 style="display:inline">Add Golfer to Event</h5>
+    <button class ="btn btn-dark" onClick='showHideSection("add_new_event_golfers")'>Show/Hide</button>
+  </div>
+  <div id='add_new_event_golfers' hidden>
     <table class="table">
       <tr>
         <td>
@@ -95,26 +99,40 @@ table {
         </td>
       </tr>
       <tr>
+        <td>
+          Name on scorecard
+        </td>
+        <td>
+          <input placeholder="Shorthand name" id='new_event_golfer_scorecard_name'>
+        </td>
+      </tr>
+      <tr>
         <td colspan="2">
-          <button class="btn btn-success btn-block" type="submit" onClick='addGolfer($("#new_event_golfer_name").val(), $("#new_event_golfer_team :selected").val())'>Add Golfer</button>
+          <button class="btn btn-success btn-block" type="submit" onClick='addGolfer($("#new_event_golfer_name").val(), $("#new_event_golfer_team :selected").val(), $("#new_event_golfer_scorecard_name").val())'>Add Golfer</button>
         </td>
       </tr>
     </table>   
 
   </div>
   <hr>
-  <h5>Current Golfers</h5>
-  <div id = "current_golfers">
+  <div>
+    <h5 style="display:inline">Current Golfers</h5>
+    <button class ="btn btn-dark" onClick='showHideSection("current_golfers")'>Show/Hide</button>
+  </div>
+  <div id = "current_golfers" hidden>
     
   </div>
 
   <hr>
 
   
+  <div>
+    <h5 style="display:inline">Add Course</h5>
+    <button class ="btn btn-dark" onClick='showHideSection("add_new_course")'>Show/Hide</button>
+  </div>
+  <div id='add_new_course' hidden>
 
-  <div id='add_new_course'>
-
-    <h4>Add Course</h5>
+    
     <div class="border-bottom:10px">
 
     <table class="table">
@@ -178,10 +196,16 @@ table {
   </div>
 
   </div>
+  <hr>
+  
+  <div>
+    <h5 style="display:inline">Add Round</h5>
+    <button class ="btn btn-dark" onClick='showHideSection("add_new_round")'>Show/Hide</button>
+  </div>
 
-  <div id='add_new_round'>
+  <div id='add_new_round' hidden>
 
-    <h4>Add Round</h5>
+   
     <div class="border-bottom:10px">
 
     <table class="table">
@@ -242,6 +266,9 @@ table {
 
   </div>
 
+  <hr>
+
+  <h5>Rounds</h5>
   <div id='admin_round_selector'>
 
   </div>
