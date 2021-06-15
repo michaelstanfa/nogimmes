@@ -27,9 +27,13 @@ tbody {
 .scorecard_table {
 	/* background-color: orangered; */
 	border-collapse: collapse;
-	/* border: 1px solid black; */
+	border: 1px solid black;
 	max-width: 100%;
 	min-width: 25%;
+	margin-left: 7.5em;
+	overflow-x: scroll;
+	overflow-y: visible;
+	padding: 0;
 }
 
 td.scorecard, tr.scorecard {
@@ -37,14 +41,36 @@ td.scorecard, tr.scorecard {
 	border: 1px solid black;
 	text-align: center;
 	min-width: 25px;
+	white-space: nowrap;
+	height: 36px;
+	
 }
 
 td.scorecard_labels {
-	min-width: 70px;
+	height: 25px;
+	position: absolute;
+	width:8em;
+	white-space: nowrap;
+	left: 0;
+	text-align: right;
+	/* text-align: right; */
+	top: auto;
+	border-top-width: 1px;
+	/*only relevant for first row*/
+	margin-top: -1px;
+	border-collapse: collapse;
+	height: 36px;
+	overflow-x:scroll;
+	vertical-align: bottom;
+	/* border: 1px solid black; */
+	/*compensate for top border*/
+	/* min-width: 70px;
 	white-space: nowrap;
 	border-collapse: collapse;
 	border: 1px solid black;
 	text-align: left;
+	position: absolute;
+	width: 15em; */
 }
 
 .scoreboard_table {
@@ -52,7 +78,8 @@ td.scorecard_labels {
 	border-collapse: collapse;
 	border:1px solid black;
 	max-width: 100%;
-	min-width: 25%;
+	height: 36px;
+	/* min-width: 25%; */
 
 }
 
@@ -60,14 +87,14 @@ td.scorecard_labels {
 	text-align: right;
 }
 
-button {
+/* button {
 	margin: 5px
-}
+} */
 
 .par-input-box{
 	max-width: 50px;
 }
-
+/* 
 .center {
 	text-align: center
-}
+} */

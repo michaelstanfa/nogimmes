@@ -49,6 +49,7 @@ const loadMatchupTable = async (round) => {
 	let retrievedMatchups = await retrieveMatchups(round);
 
 	//also figure out singles or doubles
+	$("#matchups").html("");
 	setupScorecard(retrievedMatchups, round);
 
 }
@@ -81,87 +82,40 @@ const setupScorecard = async (matchups, round) => {
 			let ele = document.getElementById("matchups");
 			let table = await buildMatchupTable(matchup, par);
 			
+			let redTeamList = await matchup.red.team.map(async m => await fetchUserName(m));
+			let blueTeamList = await matchup.blue.team.map(async m => await fetchUserName(m));
+
+			let redTeam = await redTeamList[0] + (redTeamList.length == 2 ? " & " + await redTeamList[1] : "");
+			let blueTeam = await blueTeamList[0] + (blueTeamList.length == 2 ? " & " + await blueTeamList[1] : "");
 			
+			let labelRow = document.createElement("tr");
+			let labelTd = document.createElement("h5");
+			labelTd.setAttribute("colspan", "100%");
+			labelTd.innerHTML = redTeam + " vs. " + blueTeam;
+			labelRow.appendChild(labelTd);
+
+			ele.appendChild(labelRow);
 			ele.appendChild(table);
+
+			let hrTd = document.createElement('hr');
+
+			ele.appendChild(hrTd);
+
 			matchNum++;
 
-
-
-			//need to know singles or doubles
-			let team = matchup['team'];
-			console.log(team);
-			let rowColor = "#d3d3d3";
-			// if(team.advantage.team == 'Blue') {
-			// 	rowColor = '#00DCFF';
-			// } else if (team.advantage.team == 'Red') {
-			// 	rowColor = '#FF8A8A';
-			// }
-
-			body += "<tr bgcolor = " + rowColor + ">";
-			// body += TD_OPEN + matchNum + TD_CLOSE;
-
-			// let totalHoles = team.blue.score + team.red.score + team.ties;
-
-			// body += "<td align='center'>" + team.blue.member1.name + br + team.blue.member2.name + TD_CLOSE;
-			// body += "<td align='center'><b>" + team.blue.score + " - " + team.red.score + "</b><br>thru " + totalHoles + "<br><button class='btn btn-info' onclick='openUserModal(" + JSON.stringify(matchup) + ", " + matchNum + ")' id='update_score_" + matchNum + "data-target='#submit-modal' data-toggle='modal'>Scorecard</button>" + TD_CLOSE;
-			// body += "<td align='center'>" + team.red.member1.name + br + team.red.member2.name + TD_CLOSE + "</tr>"
-			// body += TR_CLOSE;
-
 		});
-
-		// let total = "";
-		// total += TR_OPEN;
-		// // total += TH_OPEN + TH_CLOSE;
-		// total += "<td align = 'center'><h5>" + "BLUE" + "<h5></td>";
-		// total += "<td align = 'center'><h5>" + await calculateTotalPoints("blue", matchups) + " - " + await calculateTotalPoints("red", matchups) + "<h5>" + TD_CLOSE;
-		// total += "<td align = 'center'><h5>" + "RED " + "</h5>" + TD_CLOSE;
-		// total += TR_CLOSE;
-
-		// let holeCount = "";
-		// holeCount += TR_OPEN;
-		// // holeCount += TH_OPEN + TH_CLOSE;
-		// holeCount += "<td align = 'center'><h5>" + "Hole Count" + "<h5></td>";;
-		// holeCount += "<td align = 'center'><h5>" + await calculateTotalHolesWon("blue", matchups) + " - " + await calculateTotalHolesWon("red", matchups) + "<h5></td>";;
-		// holeCount += "<td align = 'center'><h5>" + "<h5></td>";;
-		// holeCount += TR_CLOSE;
-
-		// html += total;
-		// html += body;
-		// html += holeCount;
-
-		// html += TABLE_CLOSE + "</div>"
-
-		// $("#matchups").html(matchupsHTML);		
+	
 	});
 }
 
 const buildMatchupTable = async (matchup, courseData) => {
 	let fragment = document.createDocumentFragment();
 	
-	let redTeamList = await matchup.red.team.map(async m => await fetchUserName(m));
-	let blueTeamList = await matchup.blue.team.map(async m => await fetchUserName(m));
-
-	let redTeam = await redTeamList[0] + (redTeamList.length == 2 ? " & " + await redTeamList[1] : "");
-	let blueTeam = await blueTeamList[0] + (blueTeamList.length == 2 ? " & " + await blueTeamList[1] : "");
-	
-	let labelRow = document.createElement("tr");
-	let labelTd = document.createElement("td");
-	labelTd.setAttribute("colspan", "100%");
-	labelTd.innerHTML = redTeam + " vs. " + blueTeam;
-	labelRow.appendChild(labelTd);
-
-
 	let holeRow = document.createElement("tr");
 	let redRow = document.createElement("tr");
 	let blueRow = document.createElement("tr");
 	let parRow = document.createElement("tr");
 	let winnerRow = document.createElement("tr");
-
-	holeRow.classList.add("scorecard_labels");
-	redRow.classList.add("scorecard_labels");
-	blueRow.classList.add("scorecard_labels");
-	parRow.classList.add("scorecard_labels");
-	winnerRow.classList.add("scorecard_labels");
 
 	let tdClassList = "scorecard";
 	let tdClassListLabels = "scorecard_labels"
@@ -169,7 +123,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 	let holeTd = document.createElement("td");
 	holeTd.innerHTML = "Hole";
 	holeTd.classList.add(tdClassListLabels);
-
+	holeTd.classList.add(tdClassList);
 	holeRow.appendChild(holeTd);
 
 	for (i = 1; i<=9; i++) {
@@ -177,6 +131,8 @@ const buildMatchupTable = async (matchup, courseData) => {
 		let buttonHole = document.createElement("button");
 		buttonHole.innerHTML = i;
 		buttonHole.setAttribute("value", i);
+		buttonHole.classList.add("btn");
+		buttonHole.classList.add("btn-primary")
 		buttonHole.onclick = function() {
 			
 			editMatchupHoleScore(matchup, this.value);
@@ -200,6 +156,8 @@ const buildMatchupTable = async (matchup, courseData) => {
 		let buttonHole = document.createElement("button");
 		buttonHole.innerHTML = i;
 		buttonHole.setAttribute("value", i);
+		buttonHole.classList.add("btn");
+		buttonHole.classList.add("btn-primary")
 		buttonHole.onclick = function() {
 
 			editMatchupHoleScore(matchup, this.value);
@@ -255,17 +213,20 @@ const buildMatchupTable = async (matchup, courseData) => {
 	
 	let redLabel = document.createElement("td");
 	redLabel.classList.add(tdClassListLabels);
+	redLabel.classList.add(tdClassList);
 	redLabel.innerHTML = redTeamScorecardName;
 
 	redRow.appendChild(redLabel);
 
 	let blueLabel = document.createElement("td");
 	blueLabel.classList.add(tdClassListLabels);
+	blueLabel.classList.add(tdClassList);
 	blueLabel.innerHTML = blueTeamScorecardName;
 	blueRow.appendChild(blueLabel);
 
 	let parLabel = document.createElement("td");
 	parLabel.classList.add(tdClassListLabels)
+	parLabel.classList.add(tdClassList);
 	parLabel.innerHTML = "Par";
 
 	let redOutScore = 0;
@@ -401,6 +362,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 
 	let winnerLabel = document.createElement("td");
 	winnerLabel.classList.add(tdClassListLabels)
+	winnerLabel.classList.add(tdClassList);
 	winnerLabel.innerHTML = "Hole Winner";
 	
 	winnerRow.appendChild(winnerLabel);
@@ -450,7 +412,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 	winnerRow.appendChild(winnerPoints);
 
 
-	fragment.appendChild(labelRow);
+	// fragment.appendChild(labelRow);
 	fragment.appendChild(holeRow);
 	fragment.appendChild(redRow);
 	fragment.appendChild(blueRow);
