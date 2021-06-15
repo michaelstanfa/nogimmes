@@ -90,6 +90,7 @@ const setupScorecard = async (matchups, round) => {
 			
 			let labelRow = document.createElement("tr");
 			let labelTd = document.createElement("h5");
+
 			labelTd.setAttribute("colspan", "100%");
 			labelTd.innerHTML = redTeam + " vs. " + blueTeam;
 			labelRow.appendChild(labelTd);
@@ -240,18 +241,18 @@ const buildMatchupTable = async (matchup, courseData) => {
 
 		let tdRed = document.createElement("td");
 		tdRed.classList.add(tdClassList);
-		tdRed.innerHTML = matchup.red.score["hole" + i];
+		tdRed.innerHTML = Number(matchup.red.score["hole" + i]);
 		tdRed.setAttribute("id", matchup.id + "-red-" + i);
 		redRow.appendChild(tdRed);
-		redOutScore += matchup.red.score["hole" + i];
+		redOutScore += Number(matchup.red.score["hole" + i]);
 
 		
 		let tdBlue = document.createElement("td");
 		tdBlue.classList.add(tdClassList);
-		tdBlue.innerHTML = matchup.blue.score["hole" + i];
+		tdBlue.innerHTML = Number(matchup.blue.score["hole" + i]);
 		tdBlue.setAttribute("id", matchup.id + "-blue-" + i);
 		blueRow.appendChild(tdBlue);
-		blueOutScore += matchup.blue.score["hole" + i];
+		blueOutScore += Number(matchup.blue.score["hole" + i]);
 	}
 
 	let redOut = document.createElement("td");
@@ -280,17 +281,17 @@ const buildMatchupTable = async (matchup, courseData) => {
 
 		let tdRed = document.createElement("td");
 		tdRed.classList.add(tdClassList);
-		tdRed.innerHTML = matchup.red.score["hole" + i];
+		tdRed.innerHTML = Number(matchup.red.score["hole" + i]);
 		tdRed.setAttribute("id", matchup.id + "-red-" + i);
 		redRow.appendChild(tdRed);
-		redInScore += matchup.red.score["hole" + i];
+		redInScore += Number(matchup.red.score["hole" + i]);
 
 		let tdBlue = document.createElement("td");
 		tdBlue.classList.add(tdClassList);
-		tdBlue.innerHTML = matchup.blue.score["hole" + i];
+		tdBlue.innerHTML = Number(matchup.blue.score["hole" + i]);
 		tdBlue.setAttribute("id", matchup.id + "-blue-" + i);
 		blueRow.appendChild(tdBlue);
-		blueInScore += matchup.blue.score["hole" + i];
+		blueInScore += Number(matchup.blue.score["hole" + i]);
 	}
 	
 	let redIn = document.createElement("td");
@@ -324,7 +325,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 
 	let blueTotal = document.createElement("td");
 	blueTotal.classList.add(tdClassList);
-	blueTotal.innerHTML = blueInScore + blueOutScore;
+	blueTotal.innerHTML = Number(blueInScore) + Number(blueOutScore);
 	blueRow.appendChild(blueTotal);
 
 	let blueHolesWonTd = document.createElement("td");
@@ -370,7 +371,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 	for (i=1; i<=9; i++) {
 		let winnerTd = document.createElement("td");
 		winnerTd.classList.add(tdClassList);
-		winnerTd.innerHTML = matchup.red.score["hole" + i] == matchup.blue.score["hole" + i] ? "--" : (matchup.red.score["hole" + i] < matchup.blue.score["hole" + i] ? "Red" : "Blue");
+		winnerTd.innerHTML = matchup.red.score["hole" + i] == matchup.blue.score["hole" + i] ? "Tie" : (matchup.red.score["hole" + i] < matchup.blue.score["hole" + i] ? "Red" : "Blue");
 		winnerRow.appendChild(winnerTd);
 	}
 
@@ -383,7 +384,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 	for (i=10; i<=18; i++) {
 		let winnerTd = document.createElement("td");
 		winnerTd.classList.add(tdClassList);
-		winnerTd.innerHTML = matchup.red.score["hole" + i] == matchup.blue.score["hole" + i] ? "--" : (matchup.red.score["hole" + i] < matchup.blue.score["hole" + i] ? "Red" : "Blue");
+		winnerTd.innerHTML = matchup.red.score["hole" + i] == matchup.blue.score["hole" + i] ? "Tie" : (matchup.red.score["hole" + i] < matchup.blue.score["hole" + i] ? "Red" : "Blue");
 		winnerRow.appendChild(winnerTd);
 	}
 
@@ -534,108 +535,8 @@ const submitCurrentScores = async () => {
 	$("#" + id.toString() + "-red-" + holeNumberOnly).html(redTeamScore);
 	$("#" + id.toString() + "-blue-" + holeNumberOnly).html(blueTeamScore);
 
-	buildMatchupTable(matchup);	
-
-	// let id = 
-	
-	// let matchups = await db.collection("matchups");
-	// let id = $("#modal_submit_score").attr("team_index");
-
-	// let matchup = await matchups.doc(id.toString()).get();
-
-	// let red = matchup.data()['team']['red'];
-	// let blue = matchup.data()['team']['blue'];
-	// let advantage = matchup.data()['team']['advantage']
-
-	// let blue_score = {
-	// 	score_1: $("#score-blue-id_" + id + "_hole_1").val(),
-	// 	score_2: $("#score-blue-id_" + id + "_hole_2").val(),
-	// 	score_3: $("#score-blue-id_" + id + "_hole_3").val(),
-	// 	score_4: $("#score-blue-id_" + id + "_hole_4").val(),
-	// 	score_5: $("#score-blue-id_" + id + "_hole_5").val(),
-	// 	score_6: $("#score-blue-id_" + id + "_hole_6").val(),
-	// 	score_7: $("#score-blue-id_" + id + "_hole_7").val(),
-	// 	score_8: $("#score-blue-id_" + id + "_hole_8").val(),
-	// 	score_9: $("#score-blue-id_" + id + "_hole_9").val(),
-	// 	score_10: $("#score-blue-id_" + id + "_hole_10").val(),
-	// 	score_11: $("#score-blue-id_" + id + "_hole_11").val(),
-	// 	score_12: $("#score-blue-id_" + id + "_hole_12").val(),
-	// 	score_13: $("#score-blue-id_" + id + "_hole_13").val(),
-	// 	score_14: $("#score-blue-id_" + id + "_hole_14").val(),
-	// 	score_15: $("#score-blue-id_" + id + "_hole_15").val(),
-	// 	score_16: $("#score-blue-id_" + id + "_hole_16").val(),
-	// 	score_17: $("#score-blue-id_" + id + "_hole_17").val(),
-	// 	score_18: $("#score-blue-id_" + id + "_hole_18").val()
-	// }
-
-	// let red_score = {
-	// 	score_1: $("#score-red-id_" + id + "_hole_1").val(),
-	// 	score_2: $("#score-red-id_" + id + "_hole_2").val(),
-	// 	score_3: $("#score-red-id_" + id + "_hole_3").val(),
-	// 	score_4: $("#score-red-id_" + id + "_hole_4").val(),
-	// 	score_5: $("#score-red-id_" + id + "_hole_5").val(),
-	// 	score_6: $("#score-red-id_" + id + "_hole_6").val(),
-	// 	score_7: $("#score-red-id_" + id + "_hole_7").val(),
-	// 	score_8: $("#score-red-id_" + id + "_hole_8").val(),
-	// 	score_9: $("#score-red-id_" + id + "_hole_9").val(),
-	// 	score_10: $("#score-red-id_" + id + "_hole_10").val(),
-	// 	score_11: $("#score-red-id_" + id + "_hole_11").val(),
-	// 	score_12: $("#score-red-id_" + id + "_hole_12").val(),
-	// 	score_13: $("#score-red-id_" + id + "_hole_13").val(),
-	// 	score_14: $("#score-red-id_" + id + "_hole_14").val(),
-	// 	score_15: $("#score-red-id_" + id + "_hole_15").val(),
-	// 	score_16: $("#score-red-id_" + id + "_hole_16").val(),
-	// 	score_17: $("#score-red-id_" + id + "_hole_17").val(),
-	// 	score_18: $("#score-red-id_" + id + "_hole_18").val()
-	// }
-
-	// let red_wins = 0;
-	// let blue_wins = 0;
-	// let tie = 0;
-
-	// for(i = 1; i <= 18; i++) {
-	// 	let b = blue_score['score_' + i];
-	// 	let r = red_score['score_' + i];
-	// 	if(b < r) {
-	// 		blue_wins ++;
-	// 	} else if(r < b) {
-	// 		red_wins ++;
-	// 	} else {
-	// 		if(b != 0 & r != 0){
-	// 			tie ++;	
-	// 		}	
-	// 	}
-	// }
-
-	// if(blue_wins > red_wins) {
-	// 	advantage = {
-	// 		team: "Blue"
-	// 	}
-	// } else if(red_wins > blue_wins ) {
-	// 	advantage = {
-	// 		team: "Red"
-	// 	}
-	// } else {
-	// 	advantage = {
-	// 		team: "Even"
-	// 	}
-	// }
-
-	// ties = tie;
-
-	// blue.score = blue_wins;
-	// red.score = red_wins;
-
-	// blue.scores = blue_score;
-	// red.scores = red_score;
-
-	// db.collection("matchups").doc(id.toString()).set({
-	// 	team: {blue, red, advantage, ties}
-	// }).then(function() {
-	//     console.log("Document successfully written!");
-	// 	location.reload();
-	// })
-
+	$("#matchups").html("");
+	loadMatchupTable(roundNumber);
 }
 
 const populateBlueTeamScores =(id, info) => {
