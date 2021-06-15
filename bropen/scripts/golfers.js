@@ -26,9 +26,7 @@ const populateGolfersForAdmin = async () => {
 		golfersHtml += "</tr>";
 		
 		allGolfers[allGolfers.length - 1].then(golfersArr => {
-			golfersArr.forEach(golfer => {
-				console.log(golfer);
-				
+			golfersArr.forEach(golfer => {				
 				golfersHtml += "<tr>";
 				golfersHtml += "<td>" + golfer.name + "</td>";
 				golfersHtml += "<td>" + golfer.team + "</td>";

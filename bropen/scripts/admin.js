@@ -148,8 +148,6 @@ const displayRoundMatchupForAdmin = async (round) => {
 	redHeader.appendChild(document.createTextNode("Blue"));
 	lastHeader.appendChild(document.createTextNode(""));
 
-
-
 	snapshot.docs.forEach(async(d) => {
 
 		var newRow = tbodyRef.insertRow();
@@ -160,6 +158,8 @@ const displayRoundMatchupForAdmin = async (round) => {
 
 		let redTeamList = await d.data().red.team.map(async m => await fetchUserName(m));
 		let blueTeamList = await d.data().blue.team.map(async m => await fetchUserName(m));
+
+		console.log(redTeamList);
 		
 		let redTeam = await redTeamList[0] + (redTeamList.length == 2 ? " & " + await redTeamList[1] : "");
 		let blueTeam = await blueTeamList[0] + (blueTeamList.length == 2 ? " & " + await blueTeamList[1] : "");
@@ -224,13 +224,21 @@ const populateAdminCourses = async () => {
 
 const fetchUserName = async (userName) => {
 	return new Promise(async function(resolve, reject){
-		resolve(fetchUser(userName));
+		let user = await fetchUser(userName);
+		resolve(user.name);
+	})
+}
+
+const fetchScorecardName = async (userName) => {
+	return new Promise(async function(resolve, reject){
+		let user = await fetchUser(userName);
+		resolve(user.scorecardName);
 	})
 }
 
 const fetchUser = async (userName) => {
 	let user = await db.collection('golfers').doc(userName).get();
-	return user.data().name;
+	return user.data();
 }
 
 const removeGroupingFromRound = async (id, round) => {
@@ -330,14 +338,36 @@ const addMatchup = async () => {
 		bluePlayers.push($("#blue_team_dropdown_2 :selected").val());
 	}
 
+	let emptyRound = {
+		hole1: 0,
+		hole2: 0,
+		hole3: 0,
+		hole4: 0,
+		hole5: 0,
+		hole6: 0,
+		hole7: 0,
+		hole8: 0,
+		hole9: 0,
+		hole10: 0,
+		hole11: 0,
+		hole12: 0,
+		hole13: 0,
+		hole14: 0,
+		hole15: 0,
+		hole16: 0,
+		hole17: 0,
+		hole18: 0
+	}	
+
 	updateData = {
+		round: round.id,
 		red: {
 			team: redPlayers,
-			score: 0
+			score: emptyRound
 		},
 		blue: {
 			team: bluePlayers,
-			score: 0
+			score: emptyRound
 		}
 	}
 
@@ -347,11 +377,10 @@ const addMatchup = async () => {
 		return shard.size;
 	});
 	
-	await matchups.doc().set(updateData);
+	let docRef = await matchups.add(updateData);
+	await docRef.update({id: docRef.id});
 
 	displayRoundMatchupForAdmin(currentRoundForAddingMatchup.toString());
-
-
 
 }
 
