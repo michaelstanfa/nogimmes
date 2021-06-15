@@ -495,11 +495,11 @@ const editMatchupHoleScore = async (matchup, hole) => {
 	$("#matchup-hole-number").html("Hole " + hole);
 	$("#matchup-round-number").html("Round " + matchup.round);
 
-	let redTeamList = await matchup.red.team.map(async m => await fetchUserName(m));
+	let redTeamList = await matchup.red.team.map(async m => await fetchScorecardName(m));
 	let redTeam = await redTeamList[0] + (redTeamList.length == 2 ? " & " + await redTeamList[1] : "");
 	$("#matchup-red-team-modal-name").html(redTeam);
 
-	let blueTeamList = await matchup.blue.team.map(async m => await fetchUserName(m));
+	let blueTeamList = await matchup.blue.team.map(async m => await fetchScorecardName(m));
 	let blueTeam = await blueTeamList[0] + (blueTeamList.length == 2 ? " & " + await blueTeamList[1] : "");
 	$("#matchup-blue-team-modal-name").html(blueTeam);
 
