@@ -487,7 +487,7 @@ const editScores = (round, match, hole) => {
 }
 
 const editMatchupHoleScore = async (matchup, hole) => {
-	console.log(matchup.id);
+
 	$("#matchup-id-for-submit").html(matchup.id);
 	$("#matchup-red-team-modal-score").val(matchup.red.score["hole" + hole]);
 	$("#matchup-blue-team-modal-score").val(matchup.blue.score["hole" + hole]);
