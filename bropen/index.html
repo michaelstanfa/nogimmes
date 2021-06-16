@@ -35,7 +35,8 @@
 
   <script type = "text/javascript">
 	// window.onload = loadData();
-  $(document).ready(function() {
+  $(document).ready(async function() {
+    await fetchDataFromFirebase();
     populateGolfersForIndex();
     loadScoreboard();
     loadGolfers();

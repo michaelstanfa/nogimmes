@@ -1,3 +1,7 @@
+let roundsData = null;
+let golfersData = null;
+
+
 let thisWeek = null;
 let picks = null;
 let choices = null;
@@ -29,6 +33,11 @@ function HeadToHead(id, pairOne, pairTwo) {
 	this.id = id;
 	this.pairOne = pairOne;
 	this.pairTwo = pairTwo;
+}
+
+const fetchDataFromFirebase = async () => {
+	roundsData = await db.collection('rounds').get();
+	golfersData = await db.collection('golfers').get();
 }
 
 const showHideSection = async (sectionId) => {
@@ -457,6 +466,10 @@ const buildMatchupTable = async (matchup, courseData) => {
 	return table;
 	
 }
+
+// const loadScoreboard = async () => {
+// 	console.log(roundsData);
+// }
 
 const determineMatchupScoreboard = async (matchup) => {
 	let redHolesWon = 0;
