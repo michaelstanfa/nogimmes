@@ -75,11 +75,14 @@ const setupScorecard = async (matchups, round) => {
 	matchNum = 0;
 
 	await matchups[matchups.length - 1].then(async (matchupArr) => {
-		console.log(round);
+		
+		matchupArr.sort((a, b) => (a.order > b.order) ? 1 : -1);
+		
 		await matchupArr.forEach(async (matchup) => {
 
 			// matchupsHTML.append() += await buildMatchupTable(matchup);
 			let ele = document.getElementById("matchups");
+			
 			let table = await buildMatchupTable(matchup, par);
 			
 			let redTeamList = await matchup.red.team.map(async m => await fetchUserName(m));

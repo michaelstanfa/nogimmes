@@ -126,10 +126,6 @@ const confirmScore = async (ele) => {
 	window.confirm(ele);
 }
 
-const editHoleScore = (round, matchup, hole) => {
-	
-}
-
 const displayRoundMatchupForAdmin = async (round) => {
 
 	$("#current_matchup_rows").html("");
@@ -140,10 +136,12 @@ const displayRoundMatchupForAdmin = async (round) => {
 	var tbodyRef = document.getElementById('current_matchup_rows');
 
 	var headerRow = tbodyRef.insertRow();
+	var orderHeader = headerRow.insertCell();
 	var blueHeader = headerRow.insertCell();
 	var redHeader = headerRow.insertCell();
 	var lastHeader = headerRow.insertCell();
-
+	
+	orderHeader.appendChild(document.createTextNode("Order"));
 	blueHeader.appendChild(document.createTextNode("Red"));
 	redHeader.appendChild(document.createTextNode("Blue"));
 	lastHeader.appendChild(document.createTextNode(""));
@@ -152,6 +150,7 @@ const displayRoundMatchupForAdmin = async (round) => {
 
 		var newRow = tbodyRef.insertRow();
 
+		var orderCell = newRow.insertCell();
 		var redCell = newRow.insertCell();
 		var blueCell = newRow.insertCell();
 		var buttonCell = newRow.insertCell();
@@ -161,10 +160,12 @@ const displayRoundMatchupForAdmin = async (round) => {
 
 		console.log(redTeamList);
 		
+		let order = await d.data().order;
 		let redTeam = await redTeamList[0] + (redTeamList.length == 2 ? " & " + await redTeamList[1] : "");
 		let blueTeam = await blueTeamList[0] + (blueTeamList.length == 2 ? " & " + await blueTeamList[1] : "");
 		let removeButton = $("<button class='btn btn-danger' onClick='removeGroupingFromRound(\"" + d.id + "\"," + round + ")'>Remove Group</button>");
-
+		
+		orderCell.appendChild(document.createTextNode(order));
 		redCell.appendChild(document.createTextNode(redTeam));
 		blueCell.appendChild(document.createTextNode(blueTeam))
 		removeButton.appendTo(buttonCell);
@@ -359,7 +360,10 @@ const addMatchup = async () => {
 		hole18: 0
 	}	
 
+	let order = $("#order").val();
+
 	updateData = {
+		order: order,
 		round: round.id,
 		red: {
 			team: redPlayers,
@@ -467,9 +471,9 @@ const addNewMatchup = async () => {
 		})
 
 		clearInput($("#new_blue_player_1"));		
-		clearInput($("#new_blue_player_2"));		
-		clearInput($("#new_red_player_1"));		
-		clearInput($("#new_red_player_2"));		
+		clearInput($("#new_blue_player_2"));
+		clearInput($("#new_red_player_1"));
+		clearInput($("#new_red_player_2"));
 
 	}
 
