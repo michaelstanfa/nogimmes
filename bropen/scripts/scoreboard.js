@@ -26,7 +26,7 @@ const loadScoreboard = async () => {
         blueTotalPoints += blueRoundPoints;
 
         $("#blue_total_points").html(blueTotalPoints);
-        $("#red_total_points").html(blueTotalPoints);
+        $("#red_total_points").html(redTotalPoints);
 
     });
 
