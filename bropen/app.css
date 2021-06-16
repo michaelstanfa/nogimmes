@@ -98,3 +98,23 @@ button {
 .center {
 	text-align: center
 }
+
+.red-background {
+	background-color: pink
+}
+
+.blue-background {
+	background-color: lightblue
+}
+
+.tie-background {
+	background-color: lightgray
+}
+
+.no-score-background {
+	background-color:white
+}
+
+.par-background {
+	background-color:lightgreen
+}

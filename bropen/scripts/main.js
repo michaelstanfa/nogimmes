@@ -133,7 +133,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 		buttonHole.innerHTML = i;
 		buttonHole.setAttribute("value", i);
 		buttonHole.classList.add("btn");
-		buttonHole.classList.add("btn-primary")
+		buttonHole.classList.add("btn-success")
 		buttonHole.onclick = function() {
 			
 			editMatchupHoleScore(matchup, this.value);
@@ -158,7 +158,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 		buttonHole.innerHTML = i;
 		buttonHole.setAttribute("value", i);
 		buttonHole.classList.add("btn");
-		buttonHole.classList.add("btn-primary")
+		buttonHole.classList.add("btn-success")
 		buttonHole.onclick = function() {
 
 			editMatchupHoleScore(matchup, this.value);
@@ -236,6 +236,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 	for(i = 1; i<=9; i++ ) {
 		let tdPar = document.createElement("td");
 		tdPar.classList.add(tdClassList);
+		tdPar.classList.add("par-background");
 		tdPar.innerHTML = courseData["par_" + i];
 		parRow.appendChild(tdPar);
 
@@ -276,6 +277,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 	for(i = 10; i<=18; i++ ) {
 		let tdPar = document.createElement("td");
 		tdPar.classList.add(tdClassList);
+		tdPar.classList.add("par-background");
 		tdPar.innerHTML = courseData["par_" + i];
 		parRow.appendChild(tdPar);
 
@@ -364,14 +366,33 @@ const buildMatchupTable = async (matchup, courseData) => {
 	let winnerLabel = document.createElement("td");
 	winnerLabel.classList.add(tdClassListLabels)
 	winnerLabel.classList.add(tdClassList);
-	winnerLabel.innerHTML = "Hole Winner";
+	let matchupWinnerLabel = "";
 	
+	if (blueHolesWon > redHolesWon) {
+		winnerLabel.classList.add("blue-background");
+		matchupWinnerLabel = "Blue " + blueHolesWon + " - " + redHolesWon + " thru " + Number(matchupScoreObject['played']);
+	} else if (redHolesWon > blueHolesWon) {
+		winnerLabel.classList.add("red-background");
+		matchupWinnerLabel = "Red " + redHolesWon + " - " + blueHolesWon + " thru " + Number(matchupScoreObject['played']);
+	} else {
+		winnerLabel.classList.add("tie-background");
+		matchupWinnerLabel = "Tied @ " + blueHolesWon + " thru " + Number(matchupScoreObject['played'])
+	}
+	
+	winnerLabel.innerHTML = matchupWinnerLabel;
+
 	winnerRow.appendChild(winnerLabel);
 
 	for (i=1; i<=9; i++) {
 		let winnerTd = document.createElement("td");
 		winnerTd.classList.add(tdClassList);
-		winnerTd.innerHTML = matchup.red.score["hole" + i] == matchup.blue.score["hole" + i] ? "Tie" : (matchup.red.score["hole" + i] < matchup.blue.score["hole" + i] ? "Red" : "Blue");
+		let redScore = matchup.red.score["hole" + i];
+		let blueScore = matchup.blue.score["hole" + i];
+
+		let holeWinner = redScore == blueScore ? "Tie" : (redScore < matchup.blue.score["hole" + i] ? "Red" : "Blue");
+		let holeWinnerBgClass = holeWinner == "Tie" && redScore == 0 ? "no-score-background" : holeWinner.toLowerCase() + "-background"
+		winnerTd.classList.add(holeWinnerBgClass);
+		winnerTd.innerHTML = matchup.red.score["hole" + i] == 0 ? "--" : holeWinner;
 		winnerRow.appendChild(winnerTd);
 	}
 
@@ -384,7 +405,13 @@ const buildMatchupTable = async (matchup, courseData) => {
 	for (i=10; i<=18; i++) {
 		let winnerTd = document.createElement("td");
 		winnerTd.classList.add(tdClassList);
-		winnerTd.innerHTML = matchup.red.score["hole" + i] == matchup.blue.score["hole" + i] ? "Tie" : (matchup.red.score["hole" + i] < matchup.blue.score["hole" + i] ? "Red" : "Blue");
+		let redScore = matchup.red.score["hole" + i];
+		let blueScore = matchup.blue.score["hole" + i];
+
+		let holeWinner = redScore == blueScore ? "Tie" : (redScore < matchup.blue.score["hole" + i] ? "Red" : "Blue");
+		let holeWinnerBgClass = holeWinner == "Tie" && redScore == 0 ? "no-score-background" : holeWinner.toLowerCase() + "-background"
+		winnerTd.classList.add(holeWinnerBgClass);
+		winnerTd.innerHTML = matchup.red.score["hole" + i] == 0 ? "--" : holeWinner;
 		winnerRow.appendChild(winnerTd);
 	}
 
@@ -432,6 +459,7 @@ const determineMatchupScoreboard = async (matchup) => {
 	let redHolesWon = 0;
 	let blueHolesWon = 0;
 	let ties = 0;
+	let unplayed = 0;
 
 	let redPoints = 0;
 	let bluePoints = 0;
@@ -440,9 +468,11 @@ const determineMatchupScoreboard = async (matchup) => {
 		if(matchup.red.score['hole' + i] < matchup.blue.score['hole' + i]) {
 			redHolesWon ++;
 		} else if (matchup.red.score['hole' + i] > matchup.blue.score['hole' + i]) {
-			blueHolesWon ++
+			blueHolesWon ++;
+		} else if (matchup.red.score['hole' + i] == 0) {
+			unplayed ++;
 		} else {
-			ties ++;
+			ties ++
 		}
 	}
 
@@ -461,6 +491,8 @@ const determineMatchupScoreboard = async (matchup) => {
 		redHolesWon: redHolesWon,
 		blueHolesWon: blueHolesWon,
 		ties: ties,
+		played: redHolesWon + blueHolesWon + ties,
+		unplayed: unplayed,
 		redPoints: redPoints,
 		bluePoints: bluePoints
 	}
