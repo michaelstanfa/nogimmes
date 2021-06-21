@@ -276,8 +276,19 @@ table {
   <br>
 
   <h5 class='round_number'></h5>
+
+  
   <div id = "round_information">
 
+    <div id = 'round_started' hidden>
+      Round Status: 
+      <div id = 'round_started_value'></div>
+
+      <button class='btn btn-dark' onclick="startRound(true,$('.round_number').attr('value'))", value=true>Started</button>
+      <button class='btn btn-dark' onclick="startRound(false,$('.round_number').attr('value'))" value=false>Not Started</button>
+
+    </div>
+    
     <div id='add_new_matchups' hidden>
       <br>
       

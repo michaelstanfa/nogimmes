@@ -76,7 +76,6 @@ const setupScorecard = async (matchups, round) => {
   	body = "";
 
 	let roundData = await db.collection('rounds').doc(round.toString()).get();
-	console.log(roundData);
 	let course = roundData.data().course;
 	let courseInfo = await db.collection('courses').doc(course).get();
 	let par = courseInfo.data();
@@ -122,6 +121,7 @@ const setupScorecard = async (matchups, round) => {
 }
 
 const buildMatchupTable = async (matchup, courseData) => {
+
 	let fragment = document.createDocumentFragment();
 	
 	let holeRow = document.createElement("tr");
@@ -569,8 +569,6 @@ const submitCurrentScores = async () => {
 	let redTeamScore = $("#matchup-red-team-modal-score").val();
 	let blueTeamScore = $("#matchup-blue-team-modal-score").val();
 
-	console.log(redTeamScore);
-	console.log(blueTeamScore);
 
 	let holeNumber = "hole" + holeNumberOnly;
 	let updateObject = {};

@@ -96,6 +96,7 @@ const addRound = async () => {
 		style: $("#round_style").val(),
 		playersPerTeam: $("#round_matchup_team_player_count").val(),
 		course: $("#round_course").val(),
+		roundStarted: false
 	}
 
 	rounds.doc((snapshot.size + 1).toString()).set(data);
@@ -111,11 +112,12 @@ const displayAdminRound = async (roundId) => {
 	let snapshot = await round.get();
 
 	let data = await snapshot.data();
-
+	console.log(data);
+	$("#round_started_value").html(data.roundStarted.toString());
 	$("#add_new_matchups").attr('hidden', false);
-
+	$("#round_started").attr('hidden', false);
 	$(".round_number").html("<h3>Round " + snapshot.id +"</h3>" + data.course + " | " + data.style.replace("_", " ") + " | " + data.scoring.replace("_", " ") + " | " + data.playersPerTeam + " players per team");
-
+	$(".round_number").attr("value", snapshot.id);
 	displayRoundMatchupForAdmin(snapshot.id, data);
 	populateAddMatchupDropdowns(snapshot.id, data.playersPerTeam);
 	
@@ -126,12 +128,21 @@ const confirmScore = async (ele) => {
 	window.confirm(ele);
 }
 
+const startRound = async (started, round) => {
+	await db.collection('rounds').doc(round.toString()).update({
+		roundStarted: started
+	})
+	$("#round_started_value").html(started.toString());
+}
+
 const displayRoundMatchupForAdmin = async (round) => {
 
 	$("#current_matchup_rows").html("");
 	
 	let matchups = await db.collection('rounds').doc(round).collection('matchups');
 	let snapshot = await matchups.get();
+
+	console.log(round);
 
 	var tbodyRef = document.getElementById('current_matchup_rows');
 
@@ -146,7 +157,15 @@ const displayRoundMatchupForAdmin = async (round) => {
 	redHeader.appendChild(document.createTextNode("Blue"));
 	lastHeader.appendChild(document.createTextNode(""));
 
-	snapshot.docs.forEach(async(d) => {
+	let matchupArr = [];
+
+	await snapshot.docs.forEach(async(m) => {
+		matchupArr.push(m.data());
+	})
+
+	matchupArr.sort((a, b) => (a.order > b.order) ? 1 : -1);
+
+	matchupArr.forEach(async (d) => {
 
 		var newRow = tbodyRef.insertRow();
 
@@ -155,12 +174,10 @@ const displayRoundMatchupForAdmin = async (round) => {
 		var blueCell = newRow.insertCell();
 		var buttonCell = newRow.insertCell();
 
-		let redTeamList = await d.data().red.team.map(async m => await fetchUserName(m));
-		let blueTeamList = await d.data().blue.team.map(async m => await fetchUserName(m));
-
-		console.log(redTeamList);
+		let redTeamList = await d.red.team.map(async m => await fetchUserName(m));
+		let blueTeamList = await d.blue.team.map(async m => await fetchUserName(m));
 		
-		let order = await d.data().order;
+		let order = await d.order;
 		let redTeam = await redTeamList[0] + (redTeamList.length == 2 ? " & " + await redTeamList[1] : "");
 		let blueTeam = await blueTeamList[0] + (blueTeamList.length == 2 ? " & " + await blueTeamList[1] : "");
 		let removeButton = $("<button class='btn btn-danger' onClick='removeGroupingFromRound(\"" + d.id + "\"," + round + ")'>Remove Group</button>");
@@ -502,10 +519,6 @@ const generateMatchups = async (r) => {
 	let matchups = db.collection('rounds').doc(r.toString()).collection('matchups');
 	
 	let snapshot = await matchups.get();
-
-	snapshot.docs.forEach(d => {
-		console.log(d);
-	});
 
 	let matchupArr = [];
 

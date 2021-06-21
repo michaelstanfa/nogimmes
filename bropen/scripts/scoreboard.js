@@ -9,14 +9,16 @@ const loadScoreboard = async () => {
         
         let redRoundPoints = 0;
         let blueRoundPoints = 0;
-        
+
         let matchups = await db.collection('rounds').doc(r.id).collection('matchups').get();
+        
         await matchups.forEach(async (m) => {
             let matchup = await m;
-            console.log(matchup.data().scoreboard);
+            if(r.data().roundStarted) {
+                redRoundPoints += matchup.data().scoreboard.redPoints;
+                blueRoundPoints += matchup.data().scoreboard.bluePoints;
+            }
             
-            redRoundPoints += matchup.data().scoreboard.redPoints;
-            blueRoundPoints += matchup.data().scoreboard.bluePoints;
         })
 
         $("#red_round_" + r.id + "_points").html(redRoundPoints);
