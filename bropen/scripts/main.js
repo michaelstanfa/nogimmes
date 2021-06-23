@@ -580,8 +580,8 @@ const loadScorecard = async (round) => {
 	let table = document.createElement("table");
 	table.classList.add("table");
 	table.appendChild(fragment);
-	alert(table);
-	await $("#scorecard_scores").html(table);
+	
+	$("#scorecard_scores").html(table);
 	
 }
 
