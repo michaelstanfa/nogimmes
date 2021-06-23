@@ -1,5 +1,5 @@
-let roundsData;
-let golfersData;
+let roundsData = null;
+let golfersData = null;
 
 let thisWeek = null;
 let picks = null;
@@ -53,10 +53,8 @@ const loadMatchupTable = async (round) => {
 
 	$("#round_display").html("<h3>Round " + round + "</h3>");
 	
-	//pass round into here
 	let retrievedMatchups = await retrieveMatchups(round);
 
-	//also figure out singles or doubles
 	$("#matchups").html("");
 	setupScorecard(retrievedMatchups, round);
 
@@ -199,18 +197,6 @@ const buildMatchupTable = async (matchup, courseData) => {
 	let tdPointsEarned = document.createElement("td");
 	tdPointsEarned.innerHTML="Points";
 	tdPointsEarned.classList.add(tdClassList);
-
-	// holeRow.appendChild(holeTd);
-	// holeRow.appendChild(td1);
-	// holeRow.appendChild(td2);
-	// holeRow.appendChild(td3);
-	// holeRow.appendChild(td4);
-	// holeRow.appendChild(td5);
-	// holeRow.appendChild(td6);
-	// holeRow.appendChild(td7);
-	// holeRow.appendChild(td8);
-	// holeRow.appendChild(td9);
-
 
 	holeRow.appendChild(tdIn);
 	holeRow.appendChild(tdTotal);
@@ -522,6 +508,7 @@ const loadScorecard = async (round) => {
 	let matchups = [];
 	matchups = await db.collection('rounds').doc(round.toString()).collection('matchups').get();
 	let mappedMatchups = matchups.docs.map(m => m.data());
+
 	mappedMatchups.sort((a, b) => (a.order > b.order) ? 1 : -1);
 
 	let fragment = document.createDocumentFragment();
@@ -542,6 +529,11 @@ const loadScorecard = async (round) => {
 
 	fragment.appendChild(headerRow);
 
+	mappedMatchups.length;
+
+	for(i = 0; i< mappedMatchups.length; i++ ) {
+		alert(i);
+	}
 	await mappedMatchups.forEach(async m => {
 
 		let redTeamList = m.red.team
@@ -567,8 +559,10 @@ const loadScorecard = async (round) => {
 		}
 		redTd.innerHTML = redTeam;
 		blueTd.innerHTML = blueTeam;
+
 		let winnerLabel = await getMatchupWinnerLabel(m.scoreboard.blueHolesWon, m.scoreboard.redHolesWon, scoreTd, m.scoreboard);
 		scoreTd.innerHTML = winnerLabel;
+
 		row.appendChild(blueTd);
 		row.appendChild(scoreTd);
 		row.appendChild(redTd);
