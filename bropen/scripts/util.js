@@ -86,6 +86,7 @@ const showPage = async(page) => {
 
 	if(page=="scoreboard") {
 		await loadScoreboard();
+		await loadScorecard(1);
 	}
 
 	if(page=="rounds") {
