@@ -85,7 +85,11 @@ const showPage = async(page) => {
 	$("#scoreboard").attr("hidden", true);
 
 	if(page=="scoreboard") {
-		loadScoreboard();
+		await loadScoreboard();
+	}
+
+	if(page=="rounds") {
+		await loadMatchupTable(1);
 	}
 
 	$("#" + page).attr("hidden", false);

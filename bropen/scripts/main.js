@@ -1,6 +1,5 @@
-let roundsData = null;
-let golfersData = null;
-
+let roundsData;
+let golfersData;
 
 let thisWeek = null;
 let picks = null;
@@ -378,18 +377,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 	let winnerLabel = document.createElement("td");
 	winnerLabel.classList.add(tdClassListLabels)
 	winnerLabel.classList.add(tdClassList);
-	let matchupWinnerLabel = "";
-	
-	if (blueHolesWon > redHolesWon) {
-		winnerLabel.classList.add("blue-background");
-		matchupWinnerLabel = "Blue " + blueHolesWon + " - " + redHolesWon + " thru " + Number(matchupScoreObject['played']);
-	} else if (redHolesWon > blueHolesWon) {
-		winnerLabel.classList.add("red-background");
-		matchupWinnerLabel = "Red " + redHolesWon + " - " + blueHolesWon + " thru " + Number(matchupScoreObject['played']);
-	} else {
-		winnerLabel.classList.add("tie-background");
-		matchupWinnerLabel = "Tied @ " + blueHolesWon + " thru " + Number(matchupScoreObject['played'])
-	}
+	let matchupWinnerLabel = await getMatchupWinnerLabel(blueHolesWon, redHolesWon, winnerLabel, matchupScoreObject);
 	
 	winnerLabel.innerHTML = matchupWinnerLabel;
 
@@ -467,9 +455,18 @@ const buildMatchupTable = async (matchup, courseData) => {
 	
 }
 
-// const loadScoreboard = async () => {
-// 	console.log(roundsData);
-// }
+const getMatchupWinnerLabel = async (blueHolesWon, redHolesWon, winnerLabel, matchupScoreObject) => {
+	if (blueHolesWon > redHolesWon) {
+		winnerLabel.classList.add("blue-background");
+		return "Blue " + blueHolesWon + " - " + redHolesWon + " thru " + Number(matchupScoreObject['played']);
+	} else if (redHolesWon > blueHolesWon) {
+		winnerLabel.classList.add("red-background");
+		return "Red " + redHolesWon + " - " + blueHolesWon + " thru " + Number(matchupScoreObject['played']);
+	} else {
+		winnerLabel.classList.add("tie-background");
+		return "Tied @ " + blueHolesWon + " thru " + Number(matchupScoreObject['played'])
+	}
+}
 
 const determineMatchupScoreboard = async (matchup) => {
 	let redHolesWon = 0;
@@ -517,6 +514,76 @@ const determineMatchupScoreboard = async (matchup) => {
 
 	return matchupScoreboard;
 }
+
+const loadScorecard = async (round) => {
+	// let matchupScoreObject = await determineMatchupScoreboard(matchup);
+	$("#scorecard_round_label").html(round);
+	$("#scorecard_scores").html("");
+	let matchups = [];
+
+	matchups = await db.collection('rounds').doc(round.toString()).collection('matchups').get();
+	let mappedMatchups = matchups.docs.map(m => m.data());
+	mappedMatchups.sort((a, b) => (a.order > b.order) ? 1 : -1);
+
+	let fragment = document.createDocumentFragment("table");
+	let headerRow = document.createElement("tr");
+
+	let blueHeaderTd = document.createElement("td");
+	let scoreHeaderTd = document.createElement("td");
+	let redHeaderTd = document.createElement("td");
+
+	blueHeaderTd.innerHTML = "Blue";
+	scoreHeaderTd.innerHTML = "Score";
+	redHeaderTd.innerHTML = "Red";
+
+	headerRow.appendChild(blueHeaderTd);
+	headerRow.appendChild(scoreHeaderTd);
+	headerRow.appendChild(redHeaderTd);
+	headerRow.classList.add("center");
+
+	fragment.appendChild(headerRow);
+
+	await mappedMatchups.forEach(async m => {
+
+		let redTeamList = m.red.team
+		let blueTeamList = m.blue.team
+
+		let redTeam = redTeamList[0] + (redTeamList.length == 2 ? " & " + redTeamList[1] : "");
+		let blueTeam = blueTeamList[0] + (blueTeamList.length == 2 ? " & " + blueTeamList[1] : "");
+
+		let row = document.createElement('tr');
+		
+		let redTd = document.createElement('td');
+		let scoreTd = document.createElement('td');
+		let blueTd = document.createElement('td');
+
+		if(m.scoreboard.blueHolesWon > m.scoreboard.redHolesWon) {
+			blueTd.classList.add("blue-background");
+			redTd.classList.add("grey-background");
+		} else if (m.scoreboard.blueHolesWon < m.scoreboard.redHolesWon) {
+			redTd.classList.add("red-background");
+		} else {
+			blueTd.classList.add("tie-background");
+			redTd.classList.add("tie-background");
+		}
+		redTd.innerHTML = redTeam;
+		blueTd.innerHTML = blueTeam;
+		scoreTd.innerHTML = await getMatchupWinnerLabel(m.scoreboard.blueHolesWon, m.scoreboard.redHolesWon, scoreTd, m.scoreboard);
+		row.appendChild(blueTd);
+		row.appendChild(scoreTd);
+		row.appendChild(redTd);
+		
+		fragment.appendChild(row);
+
+	});
+
+	let table = document.createElement("table");
+	table.classList.add("table");
+	table.appendChild(fragment);
+	$("#scorecard_scores").html(table);
+	
+}
+
 
 const editScores = (round, match, hole) => {
 

@@ -41,6 +41,7 @@
     loadScoreboard();
     loadGolfers();
     loadMatchupTable(1);
+    loadScorecard(1);
   })
 </script>
 </head>
@@ -85,22 +86,22 @@ table {
           </tr>
 
           <tr>
-            <td>Round 1</td>
+            <td><button onclick='loadScorecard(1)' class = 'btn btn-light'>Round 1</button></td>
             <td id = "blue_round_1_points"></td>
             <td id = "red_round_1_points"></td>
           </tr>
           <tr>
-            <td>Round 2</td>
+            <td><button onclick='loadScorecard(2)' class = 'btn btn-light'>Round 2</button></td>
             <td id = "blue_round_2_points"></td>
             <td id = "red_round_2_points"></td>
           </tr>
           <tr>
-            <td>Round 3</td>
+            <td><button onclick='loadScorecard(3)' class = 'btn btn-light'>Round 3</button></td>
             <td id = "blue_round_3_points"></td>
             <td id = "red_round_3_points"></td>
           </tr>
           <tr>
-            <td>Round 4</td>
+            <td><button onclick='loadScorecard(4)' class = 'btn btn-light'>Round 4</button></td>
             <td id = "blue_round_4_points"></td>
             <td id = "red_round_4_points"></td>
           </tr>
@@ -116,6 +117,13 @@ table {
       <hr>
       <div>
         <h5>Scorecards</h5>
+        <div class>
+          <h7>Round </h7>
+          <h7 id = 'scorecard_round_label'></h7>
+        </div>
+        <div id = 'scorecard_scores'>
+          
+        </div>
       </div>
     </div>
     <div id = "golfers" hidden></div>
