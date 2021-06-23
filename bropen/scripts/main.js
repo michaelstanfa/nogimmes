@@ -516,16 +516,15 @@ const determineMatchupScoreboard = async (matchup) => {
 }
 
 const loadScorecard = async (round) => {
-	// let matchupScoreObject = await determineMatchupScoreboard(matchup);
+
 	$("#scorecard_round_label").html(round);
 	$("#scorecard_scores").html("");
 	let matchups = [];
-
 	matchups = await db.collection('rounds').doc(round.toString()).collection('matchups').get();
 	let mappedMatchups = matchups.docs.map(m => m.data());
 	mappedMatchups.sort((a, b) => (a.order > b.order) ? 1 : -1);
 
-	let fragment = document.createDocumentFragment("table");
+	let fragment = document.createDocumentFragment();
 	let headerRow = document.createElement("tr");
 
 	let blueHeaderTd = document.createElement("td");
@@ -568,7 +567,8 @@ const loadScorecard = async (round) => {
 		}
 		redTd.innerHTML = redTeam;
 		blueTd.innerHTML = blueTeam;
-		scoreTd.innerHTML = await getMatchupWinnerLabel(m.scoreboard.blueHolesWon, m.scoreboard.redHolesWon, scoreTd, m.scoreboard);
+		let winnerLabel = await getMatchupWinnerLabel(m.scoreboard.blueHolesWon, m.scoreboard.redHolesWon, scoreTd, m.scoreboard);
+		scoreTd.innerHTML = winnerLabel;
 		row.appendChild(blueTd);
 		row.appendChild(scoreTd);
 		row.appendChild(redTd);
