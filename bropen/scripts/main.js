@@ -532,9 +532,7 @@ const loadScorecard = async (round) => {
 	mappedMatchups.length;
 
 	for(i = 0; i< mappedMatchups.length; i++ ) {
-		alert(i);
-	}
-	await mappedMatchups.forEach(async m => {
+		let m = mappedMatchups[i];
 
 		let redTeamList = m.red.team
 		let blueTeamList = m.blue.team
@@ -568,8 +566,44 @@ const loadScorecard = async (round) => {
 		row.appendChild(redTd);
 		
 		fragment.appendChild(row);
+	}
 
-	});
+	// await mappedMatchups.forEach(async m => {
+
+	// 	let redTeamList = m.red.team
+	// 	let blueTeamList = m.blue.team
+
+	// 	let redTeam = redTeamList[0] + (redTeamList.length == 2 ? " & " + redTeamList[1] : "");
+	// 	let blueTeam = blueTeamList[0] + (blueTeamList.length == 2 ? " & " + blueTeamList[1] : "");
+
+	// 	let row = document.createElement('tr');
+		
+	// 	let redTd = document.createElement('td');
+	// 	let scoreTd = document.createElement('td');
+	// 	let blueTd = document.createElement('td');
+
+	// 	if(m.scoreboard.blueHolesWon > m.scoreboard.redHolesWon) {
+	// 		blueTd.classList.add("blue-background");
+	// 		redTd.classList.add("grey-background");
+	// 	} else if (m.scoreboard.blueHolesWon < m.scoreboard.redHolesWon) {
+	// 		redTd.classList.add("red-background");
+	// 	} else {
+	// 		blueTd.classList.add("tie-background");
+	// 		redTd.classList.add("tie-background");
+	// 	}
+	// 	redTd.innerHTML = redTeam;
+	// 	blueTd.innerHTML = blueTeam;
+
+	// 	let winnerLabel = await getMatchupWinnerLabel(m.scoreboard.blueHolesWon, m.scoreboard.redHolesWon, scoreTd, m.scoreboard);
+	// 	scoreTd.innerHTML = winnerLabel;
+
+	// 	row.appendChild(blueTd);
+	// 	row.appendChild(scoreTd);
+	// 	row.appendChild(redTd);
+		
+	// 	fragment.appendChild(row);
+
+	// });
 
 	let table = document.createElement("table");
 	table.classList.add("table");
