@@ -28,7 +28,7 @@ const addGolfer = async(name, team, scorecardName) => {
 	} else if (!scorecardName){
 		alert('Please enter a shorthand name for the scorecard label');
 	} else {
-	 	let golfers = await db.collection('golfers');
+	 	let golfers = await db.collection('golfers_2022');
 
 		const golfer = {
 			name: name,
@@ -52,7 +52,7 @@ const retrieveMatchups = async (round) => {
 
 const populateAdminRounds = async () => {
 
-	let rounds = await db.collection('rounds');
+	let rounds = await db.collection('rounds_2022');
 
 	let snapshot = await rounds.get();
 	let adminRoundSelectorHTML = "";
@@ -87,7 +87,7 @@ const populateAdminRounds = async () => {
 }
 
 const addRound = async () => {
-	let rounds = await db.collection('rounds');
+	let rounds = await db.collection('rounds_2022');
 
 	let snapshot = await rounds.get();
 	
@@ -107,7 +107,7 @@ const addRound = async () => {
 
 const displayAdminRound = async (roundId) => {
 
-	let round = await db.collection('rounds').doc(roundId.toString());
+	let round = await db.collection('rounds_2022').doc(roundId.toString());
 
 	let snapshot = await round.get();
 
@@ -129,7 +129,7 @@ const confirmScore = async (ele) => {
 }
 
 const startRound = async (started, round) => {
-	await db.collection('rounds').doc(round.toString()).update({
+	await db.collection('rounds_2022').doc(round.toString()).update({
 		roundStarted: started
 	})
 	$("#round_started_value").html(started.toString());
@@ -139,7 +139,7 @@ const displayRoundMatchupForAdmin = async (round) => {
 
 	$("#current_matchup_rows").html("");
 	
-	let matchups = await db.collection('rounds').doc(round).collection('matchups');
+	let matchups = await db.collection('rounds_2022').doc(round).collection('matchups');
 	let snapshot = await matchups.get();
 
 	console.log(round);
@@ -255,12 +255,12 @@ const fetchScorecardName = async (userName) => {
 }
 
 const fetchUser = async (userName) => {
-	let user = await db.collection('golfers').doc(userName).get();
+	let user = await db.collection('golfers_2022').doc(userName).get();
 	return user.data();
 }
 
 const removeGroupingFromRound = async (id, round) => {
-	await db.collection('rounds').doc(round.toString()).collection('matchups').doc(id).delete();
+	await db.collection('rounds_2022').doc(round.toString()).collection('matchups').doc(id).delete();
 	displayRoundMatchupForAdmin(round.toString());
 }
 
@@ -286,7 +286,7 @@ const populateAddMatchupDropdowns = async (round, ppt) => {
 	redGolfers = [];
 	blueGolfers = [];
 
-	let golfers = await db.collection('golfers');
+	let golfers = await db.collection('golfers_2022');
 
 	let golfersSnapshot = await golfers.get();
 
@@ -341,7 +341,7 @@ const populateAddMatchupDropdowns = async (round, ppt) => {
 
 const addMatchup = async () => {
 
-	let round = await db.collection('rounds').doc(currentRoundForAddingMatchup.toString());
+	let round = await db.collection('rounds_2022').doc(currentRoundForAddingMatchup.toString());
 	let snapshot = await round.get();
 
 	let ppt = snapshot.data().playersPerTeam;
@@ -392,7 +392,7 @@ const addMatchup = async () => {
 		}
 	}
 
-	let matchups = await db.collection('rounds').doc(currentRoundForAddingMatchup.toString()).collection('matchups')
+	let matchups = await db.collection('rounds_2022').doc(currentRoundForAddingMatchup.toString()).collection('matchups')
 
 	let matchupSize = await matchups.get().then(shard => {
 		return shard.size;
@@ -516,7 +516,7 @@ const setupAllMatchups = async (round) => {
 
 const generateMatchups = async (r) => {
 	
-	let matchups = db.collection('rounds').doc(r.toString()).collection('matchups');
+	let matchups = db.collection('rounds_2022').doc(r.toString()).collection('matchups');
 	
 	let snapshot = await matchups.get();
 

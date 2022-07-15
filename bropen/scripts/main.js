@@ -35,8 +35,8 @@ function HeadToHead(id, pairOne, pairTwo) {
 }
 
 const fetchDataFromFirebase = async () => {
-	roundsData = await db.collection('rounds').get();
-	golfersData = await db.collection('golfers').get();
+	roundsData = await db.collection('rounds_2022').get();
+	golfersData = await db.collection('golfers_2022').get();
 }
 
 const showHideSection = async (sectionId) => {
@@ -72,7 +72,7 @@ const setupScorecard = async (matchups, round) => {
 	html = "<table style=\"overflow:auto\">";
   	body = "";
 
-	let roundData = await db.collection('rounds').doc(round.toString()).get();
+	let roundData = await db.collection('rounds_2022').doc(round.toString()).get();
 	let course = roundData.data().course;
 	let courseInfo = await db.collection('courses').doc(course).get();
 	let par = courseInfo.data();
@@ -496,7 +496,7 @@ const determineMatchupScoreboard = async (matchup) => {
 		bluePoints: bluePoints
 	}
 
-	await db.collection('rounds').doc(matchup.round.toString()).collection('matchups').doc(matchup.id).update({scoreboard: matchupScoreboard});
+	await db.collection('rounds_2022').doc(matchup.round.toString()).collection('matchups').doc(matchup.id).update({scoreboard: matchupScoreboard});
 
 	return matchupScoreboard;
 }
@@ -506,7 +506,7 @@ const loadScorecard = async (round) => {
 	$("#scorecard_round_label").html(round);
 	$("#scorecard_scores").html("");
 	let matchups = [];
-	matchups = await db.collection('rounds').doc(round.toString()).collection('matchups').get();
+	matchups = await db.collection('rounds_2022').doc(round.toString()).collection('matchups').get();
 	let mappedMatchups = matchups.docs.map(m => m.data());
 
 	mappedMatchups.sort((a, b) => (a.order > b.order) ? 1 : -1);
@@ -635,7 +635,7 @@ const submitCurrentScores = async () => {
 	updateObject[`red.score.${holeNumber}`] = redTeamScore;
 	updateObject[`blue.score.${holeNumber}`] = blueTeamScore;
 
-	db.collection('rounds').doc(roundNumber.toString()).collection('matchups').doc(id).update(updateObject);
+	db.collection('rounds_2022').doc(roundNumber.toString()).collection('matchups').doc(id).update(updateObject);
 
 	$("#" + id.toString() + "-red-" + holeNumberOnly).html(redTeamScore);
 	$("#" + id.toString() + "-blue-" + holeNumberOnly).html(blueTeamScore);
