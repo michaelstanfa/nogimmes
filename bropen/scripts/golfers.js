@@ -1,5 +1,5 @@
 const loadGolfers = async() => {
-    let golfers = await db.collection('golfers_2022');
+    let golfers = await db.collection('golfers_2023');
 }
 
 const populateGolfers = async() => {
@@ -81,7 +81,7 @@ const retrieveGolfers = async () => {
 }
 
 const fetchGolfers = async () => {
-	let golfers = await db.collection('golfers_2022');
+	let golfers = await db.collection('golfers_2023');
 	
 	let snapshot = await golfers.get();
 
@@ -102,7 +102,7 @@ const fetchGolfers = async () => {
 
 const deleteGolfer = async (id) => {
 	
-	const res = await db.collection('golfers_2022').doc(id).delete();
+	const res = await db.collection('golfers_2023').doc(id).delete();
 	
 	populateGolfers();
 }
