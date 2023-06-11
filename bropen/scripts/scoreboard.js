@@ -10,7 +10,7 @@ const loadScoreboard = async () => {
         let redRoundPoints = 0;
         let blueRoundPoints = 0;
 
-        let matchups = await db.collection('rounds_2022').doc(r.id).collection('matchups').get();
+        let matchups = await db.collection('rounds_2023').doc(r.id).collection('matchups').get();
         
         await matchups.forEach(async (m) => {
             let matchup = await m;
