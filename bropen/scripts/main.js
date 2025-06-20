@@ -520,7 +520,7 @@ const loadScorecard = async (round) => {
 
 	blueHeaderTd.innerHTML = "Blue";
 	scoreHeaderTd.innerHTML = "Score";
-	redHeaderTd.innerHTML = "Red";
+	redHeaderTd.innerHTML = "White";
 
 	headerRow.appendChild(blueHeaderTd);
 	headerRow.appendChild(scoreHeaderTd);
