@@ -68,7 +68,7 @@ const calculateHeadToHeadAdvantage = async (matchId) => {
 		if(red == blue) {
 			return 'Even';
 		} else if (red > blue) {
-			return 'Red';
+			return 'White';
 		} else {
 			return 'Blue'
 		}

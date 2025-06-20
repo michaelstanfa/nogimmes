@@ -375,7 +375,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 		let redScore = matchup.red.score["hole" + i];
 		let blueScore = matchup.blue.score["hole" + i];
 
-		let holeWinner = redScore == blueScore ? "Tie" : (redScore < matchup.blue.score["hole" + i] ? "Red" : "Blue");
+		let holeWinner = redScore == blueScore ? "Tie" : (redScore < matchup.blue.score["hole" + i] ? "White" : "Blue");
 		let holeWinnerBgClass = holeWinner == "Tie" && redScore == 0 ? "no-score-background" : holeWinner.toLowerCase() + "-background"
 		winnerTd.classList.add(holeWinnerBgClass);
 		winnerTd.innerHTML = matchup.red.score["hole" + i] == 0 ? "--" : holeWinner;
@@ -446,8 +446,8 @@ const getMatchupWinnerLabel = async (blueHolesWon, redHolesWon, winnerLabel, mat
 		winnerLabel.classList.add("blue-background");
 		return "Blue " + blueHolesWon + " - " + redHolesWon + " thru " + Number(matchupScoreObject['played']);
 	} else if (redHolesWon > blueHolesWon) {
-		winnerLabel.classList.add("red-background");
-		return "Red " + redHolesWon + " - " + blueHolesWon + " thru " + Number(matchupScoreObject['played']);
+		winnerLabel.classList.add("white-background");
+		return "White " + redHolesWon + " - " + blueHolesWon + " thru " + Number(matchupScoreObject['played']);
 	} else {
 		winnerLabel.classList.add("tie-background");
 		return "Tied @ " + blueHolesWon + " thru " + Number(matchupScoreObject['played'])
@@ -520,7 +520,7 @@ const loadScorecard = async (round) => {
 
 	blueHeaderTd.innerHTML = "Blue";
 	scoreHeaderTd.innerHTML = "Score";
-	redHeaderTd.innerHTML = "Red";
+	redHeaderTd.innerHTML = "White";
 
 	headerRow.appendChild(blueHeaderTd);
 	headerRow.appendChild(scoreHeaderTd);
@@ -550,7 +550,8 @@ const loadScorecard = async (round) => {
 			blueTd.classList.add("blue-background");
 			redTd.classList.add("grey-background");
 		} else if (m.scoreboard.blueHolesWon < m.scoreboard.redHolesWon) {
-			redTd.classList.add("red-background");
+			redTd.classList.add("white-background");
+			blueTd.classList.add("grey-background")
 		} else {
 			blueTd.classList.add("tie-background");
 			redTd.classList.add("tie-background");

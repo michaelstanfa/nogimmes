@@ -99,8 +99,8 @@ button {
 	text-align: center
 }
 
-.red-background {
-	background-color: pink
+.white-background {
+	background-color: white
 }
 
 .blue-background {
@@ -108,11 +108,15 @@ button {
 }
 
 .tie-background {
-	background-color: lightgray
+	background-color: lightyellow
 }
 
 .no-score-background {
-	background-color:white
+	background-color:gray
+}
+
+.grey-background {
+	background-color: lightgray
 }
 
 .par-background {
