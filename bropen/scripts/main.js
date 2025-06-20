@@ -375,7 +375,7 @@ const buildMatchupTable = async (matchup, courseData) => {
 		let redScore = matchup.red.score["hole" + i];
 		let blueScore = matchup.blue.score["hole" + i];
 
-		let holeWinner = redScore == blueScore ? "Tie" : (redScore < matchup.blue.score["hole" + i] ? "Red" : "Blue");
+		let holeWinner = redScore == blueScore ? "Tie" : (redScore < matchup.blue.score["hole" + i] ? "White" : "Blue");
 		let holeWinnerBgClass = holeWinner == "Tie" && redScore == 0 ? "no-score-background" : holeWinner.toLowerCase() + "-background"
 		winnerTd.classList.add(holeWinnerBgClass);
 		winnerTd.innerHTML = matchup.red.score["hole" + i] == 0 ? "--" : holeWinner;
