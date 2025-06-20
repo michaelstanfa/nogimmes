@@ -446,8 +446,8 @@ const getMatchupWinnerLabel = async (blueHolesWon, redHolesWon, winnerLabel, mat
 		winnerLabel.classList.add("blue-background");
 		return "Blue " + blueHolesWon + " - " + redHolesWon + " thru " + Number(matchupScoreObject['played']);
 	} else if (redHolesWon > blueHolesWon) {
-		winnerLabel.classList.add("red-background");
-		return "Red " + redHolesWon + " - " + blueHolesWon + " thru " + Number(matchupScoreObject['played']);
+		winnerLabel.classList.add("white-background");
+		return "White " + redHolesWon + " - " + blueHolesWon + " thru " + Number(matchupScoreObject['played']);
 	} else {
 		winnerLabel.classList.add("tie-background");
 		return "Tied @ " + blueHolesWon + " thru " + Number(matchupScoreObject['played'])
@@ -550,7 +550,7 @@ const loadScorecard = async (round) => {
 			blueTd.classList.add("blue-background");
 			redTd.classList.add("grey-background");
 		} else if (m.scoreboard.blueHolesWon < m.scoreboard.redHolesWon) {
-			redTd.classList.add("red-background");
+			redTd.classList.add("white-background");
 		} else {
 			blueTd.classList.add("tie-background");
 			redTd.classList.add("tie-background");
