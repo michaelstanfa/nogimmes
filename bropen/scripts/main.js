@@ -551,6 +551,7 @@ const loadScorecard = async (round) => {
 			redTd.classList.add("grey-background");
 		} else if (m.scoreboard.blueHolesWon < m.scoreboard.redHolesWon) {
 			redTd.classList.add("white-background");
+			blueTd.classList.add("grey-background")
 		} else {
 			blueTd.classList.add("tie-background");
 			redTd.classList.add("tie-background");
